@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.PInvoke", "Urasandesu.NTroll.PInvoke\Urasandesu.NTroll.PInvoke.csproj", "{FD51EBA3-6975-471E-85EA-10D940A1CD41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.EnumerateWindowsSample", "Urasandesu.NTroll.EnumerateWindowsSample\Urasandesu.NTroll.EnumerateWindowsSample.csproj", "{1F26F58D-CFB4-4F6B-A0FD-8E9B0137EE07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD51EBA3-6975-471E-85EA-10D940A1CD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD51EBA3-6975-471E-85EA-10D940A1CD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD51EBA3-6975-471E-85EA-10D940A1CD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD51EBA3-6975-471E-85EA-10D940A1CD41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F26F58D-CFB4-4F6B-A0FD-8E9B0137EE07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F26F58D-CFB4-4F6B-A0FD-8E9B0137EE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F26F58D-CFB4-4F6B-A0FD-8E9B0137EE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F26F58D-CFB4-4F6B-A0FD-8E9B0137EE07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
