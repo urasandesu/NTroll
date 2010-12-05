@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.NTroll.Glob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.MVVM", "Urasandesu.NTroll.MVVM\Urasandesu.NTroll.MVVM.csproj", "{13CC762C-6E75-4D4A-8D76-9B96B59DD2CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.DSMAnalyzer", "Urasandesu.NTroll.DSMAnalyzer\Urasandesu.NTroll.DSMAnalyzer.csproj", "{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{13CC762C-6E75-4D4A-8D76-9B96B59DD2CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13CC762C-6E75-4D4A-8D76-9B96B59DD2CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13CC762C-6E75-4D4A-8D76-9B96B59DD2CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
