@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.MVVM", "U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.DSMAnalyzer", "Urasandesu.NTroll.DSMAnalyzer\Urasandesu.NTroll.DSMAnalyzer.csproj", "{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.Elicitor", "Urasandesu.NTroll.Elicitor\Urasandesu.NTroll.Elicitor.csproj", "{07B3B2EA-9381-492B-800A-B46B7C2D0864}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3EDD30E-A35E-4E7E-B770-CC3B7399D9B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B3B2EA-9381-492B-800A-B46B7C2D0864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B3B2EA-9381-492B-800A-B46B7C2D0864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B3B2EA-9381-492B-800A-B46B7C2D0864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B3B2EA-9381-492B-800A-B46B7C2D0864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
