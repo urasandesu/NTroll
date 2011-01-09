@@ -55,5 +55,27 @@ namespace Urasandesu.NTroll.AutoGenerationHolic.Helpers.Mixins.System
 
             return attributes;
         }
+
+        public static MethodInfo GetMethodOpEquality(this Type source)
+        {
+            return source.GetMethod("op_Equality", 
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { source, source }, null);
+        }
+
+        public static bool HasOptimizedOpEquality(this Type source)
+        {
+            if (source == typeof(byte) || source == typeof(sbyte) ||
+                source == typeof(short) || source == typeof(ushort) ||
+                source == typeof(int) || source == typeof(uint) ||
+                source == typeof(long) || source == typeof(ulong) ||
+                source == typeof(float) || source == typeof(double))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
