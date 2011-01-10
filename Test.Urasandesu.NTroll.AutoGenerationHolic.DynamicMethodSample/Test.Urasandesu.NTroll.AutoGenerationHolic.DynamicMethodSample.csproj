@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{245F64C6-4685-4595-95E3-A62D3A7EB87F}</ProjectGuid>
+    <ProjectGuid>{41D084BB-154A-47F7-A51D-89100B63BDA2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Urasandesu.NTroll.AutoGenerationHolic.Helpers</RootNamespace>
-    <AssemblyName>Urasandesu.NTroll.AutoGenerationHolic.Helpers</AssemblyName>
+    <RootNamespace>Test.Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample</RootNamespace>
+    <AssemblyName>Test.Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -45,17 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DelegateEqualityComparer.cs" />
-    <Compile Include="EqualityTargetAttribute.cs" />
-    <Compile Include="EqualityTargetWithComparerAttribute.cs" />
-    <Compile Include="IDelegateEqualityComparerable.cs" />
-    <Compile Include="Mixins\System\Collections\IEnumerableMixin.cs" />
-    <Compile Include="Mixins\System\Reflection\AssemblyMixin.cs" />
-    <Compile Include="Mixins\System\Reflection\PropertyInfoMixin.cs" />
-    <Compile Include="Mixins\System\StringMixin.cs" />
-    <Compile Include="Mixins\System\TypeMixin.cs" />
-    <Compile Include="Operators.cs" />
+    <Compile Include="MethodInjectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample\Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample.csproj">
+      <Project>{7F3ABED1-9C78-44A6-9495-2B1B1155F9A5}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.Helpers\Urasandesu.NTroll.AutoGenerationHolic.Helpers.csproj">
+      <Project>{245F64C6-4685-4595-95E3-A62D3A7EB87F}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.Targets\Urasandesu.NTroll.AutoGenerationHolic.Targets.csproj">
+      <Project>{D562F8F9-7B65-4C7E-9D02-66B71DD8A8A1}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.Targets</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

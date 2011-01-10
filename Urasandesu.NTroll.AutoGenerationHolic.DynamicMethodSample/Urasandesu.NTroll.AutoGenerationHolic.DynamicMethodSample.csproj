@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{245F64C6-4685-4595-95E3-A62D3A7EB87F}</ProjectGuid>
+    <ProjectGuid>{7F3ABED1-9C78-44A6-9495-2B1B1155F9A5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Urasandesu.NTroll.AutoGenerationHolic.Helpers</RootNamespace>
-    <AssemblyName>Urasandesu.NTroll.AutoGenerationHolic.Helpers</AssemblyName>
+    <RootNamespace>Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample</RootNamespace>
+    <AssemblyName>Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -45,17 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DelegateEqualityComparer.cs" />
-    <Compile Include="EqualityTargetAttribute.cs" />
-    <Compile Include="EqualityTargetWithComparerAttribute.cs" />
-    <Compile Include="IDelegateEqualityComparerable.cs" />
-    <Compile Include="Mixins\System\Collections\IEnumerableMixin.cs" />
-    <Compile Include="Mixins\System\Reflection\AssemblyMixin.cs" />
-    <Compile Include="Mixins\System\Reflection\PropertyInfoMixin.cs" />
-    <Compile Include="Mixins\System\StringMixin.cs" />
-    <Compile Include="Mixins\System\TypeMixin.cs" />
-    <Compile Include="Operators.cs" />
+    <Compile Include="MethodInjector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.Helpers\Urasandesu.NTroll.AutoGenerationHolic.Helpers.csproj">
+      <Project>{245F64C6-4685-4595-95E3-A62D3A7EB87F}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.Helpers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
