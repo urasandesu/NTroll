@@ -22,15 +22,18 @@ namespace Test.Urasandesu.NTroll.AutoGenerationHolic.CodeDomSample
             // プロパティを使って比較が行われる。
             Assert.IsFalse(object.ReferenceEquals(customers[0], customers[1]));
             Assert.IsTrue(customers[0].Equals(customers[1]));
+            Assert.IsTrue(customers[0].GetHashCode() == customers[1].GetHashCode());
 
             Assert.IsFalse(object.ReferenceEquals(customers[0], customers[2]));
             Assert.IsFalse(customers[0].Equals(customers[2]));
+            Assert.IsFalse(customers[0].GetHashCode() == customers[2].GetHashCode());
 
             
             
             // LastName は比較対象にしていない。
             Assert.IsFalse(object.ReferenceEquals(customers[0], customers[3]));
             Assert.IsTrue(customers[0].Equals(customers[3]));
+            Assert.IsTrue(customers[0].GetHashCode() == customers[3].GetHashCode());
         }
     }
 }
