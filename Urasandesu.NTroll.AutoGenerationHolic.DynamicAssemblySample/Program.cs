@@ -124,10 +124,10 @@ namespace Urasandesu.NTroll.AutoGenerationHolic.DynamicAssemblySample
             var that = gen.DeclareLocal(type);                  // 0
             var areEqual = gen.DeclareLocal(typeof(Boolean));   // 1
             var isThat = gen.DeclareLocal(typeof(Boolean));     // 2
-            Label labelIsThat = gen.DefineLabel();
-            Label labelReturn = gen.DefineLabel();
-            Label labelAreNotEqual = gen.DefineLabel();
-            Label labelStAreEqual = gen.DefineLabel();
+            var labelIsThat = gen.DefineLabel();
+            var labelReturn = gen.DefineLabel();
+            var labelAreNotEqual = gen.DefineLabel();
+            var labelStAreEqual = gen.DefineLabel();
 
             // var that = default(Customer);
             // if ((that = obj as Customer) != null) return false;
