@@ -7,7 +7,7 @@ using Urasandesu.NTroll.AutoGenerationHolic.Helpers.Mixins.System;
 
 namespace Urasandesu.NTroll.AutoGenerationHolic.DynamicMethodSample
 {
-    public class MethodInjector<T> where T : IDelegateEqualityComparerable<T>
+    public class MethodInjector<T> where T : class, IDelegateEqualityComparerable<T>
     {
         DelegateEqualityComparer<T> comparer;
         public DelegateEqualityComparer<T> Comparer 
