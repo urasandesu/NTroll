@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -43,10 +44,28 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Urasandesu.NAnonym, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="MethodInjectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.Helpers\Urasandesu.NTroll.AutoGenerationHolic.Helpers.csproj">
+      <Project>{245F64C6-4685-4595-95E3-A62D3A7EB87F}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.NAnonymSample\Urasandesu.NTroll.AutoGenerationHolic.NAnonymSample.csproj">
+      <Project>{6FEA9933-3CA8-4376-A683-3922036958C3}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.NAnonymSample</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Urasandesu.NTroll.AutoGenerationHolic.Targets\Urasandesu.NTroll.AutoGenerationHolic.Targets.csproj">
+      <Project>{D562F8F9-7B65-4C7E-9D02-66B71DD8A8A1}</Project>
+      <Name>Urasandesu.NTroll.AutoGenerationHolic.Targets</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
