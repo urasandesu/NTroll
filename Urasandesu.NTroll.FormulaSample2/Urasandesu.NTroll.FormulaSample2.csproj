@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{05D21982-E835-405C-BCF9-F798AF93EB49}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Urasandesu.NTroll.FormulaSample2</RootNamespace>
+    <AssemblyName>Urasandesu.NTroll.FormulaSample2</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Urasandesu.NAnonym, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Formulas\AddFormula.cs" />
+    <Compile Include="Formulas\AddFormulaRef.cs" />
+    <Compile Include="Formulas\AndAlsoFormula.cs" />
+    <Compile Include="Formulas\AndAlsoFormulaRef.cs" />
+    <Compile Include="Formulas\AssignFormula.cs" />
+    <Compile Include="Formulas\AssignFormulaRef.cs" />
+    <Compile Include="Formulas\BinaryFormula.cs" />
+    <Compile Include="Formulas\BlockFormula.cs" />
+    <Compile Include="Formulas\BlockFormulaRef.cs" />
+    <Compile Include="Formulas\ConditionalFormula.cs" />
+    <Compile Include="Formulas\ConditionalFormulaRef.cs" />
+    <Compile Include="Formulas\ConstantFormula.cs" />
+    <Compile Include="Formulas\ConstantFormulaRef.cs" />
+    <Compile Include="Formulas\ConvertFormula.cs" />
+    <Compile Include="Formulas\ConvertFormulaRef.cs" />
+    <Compile Include="Formulas\EqualFormula.cs" />
+    <Compile Include="Formulas\EqualFormulaRef.cs" />
+    <Compile Include="Formulas\ExclusiveOrFormula.cs" />
+    <Compile Include="Formulas\ExclusiveOrFormulaRef.cs" />
+    <Compile Include="Formulas\ExpressionToFormula.cs" />
+    <Compile Include="Formulas\ExpressionToInlineValue.cs" />
+    <Compile Include="Formulas\Formula.cs" />
+    <Compile Include="Formulas\FormulaRef.cs" />
+    <Compile Include="Formulas\IAddFormula.cs" />
+    <Compile Include="Formulas\IAddFormulaRef.cs" />
+    <Compile Include="Formulas\IAndAlsoFormula.cs" />
+    <Compile Include="Formulas\IAndAlsoFormulaRef.cs" />
+    <Compile Include="Formulas\IAssignFormula.cs" />
+    <Compile Include="Formulas\IAssignFormulaRef.cs" />
+    <Compile Include="Formulas\IBinaryFormula.cs" />
+    <Compile Include="Formulas\IBinaryFormulaRef.cs" />
+    <Compile Include="Formulas\IBlockFormula.cs" />
+    <Compile Include="Formulas\IBlockFormulaRef.cs" />
+    <Compile Include="Formulas\IConditionalFormula.cs" />
+    <Compile Include="Formulas\IConditionalFormulaRef.cs" />
+    <Compile Include="Formulas\IConstantFormula.cs" />
+    <Compile Include="Formulas\IConstantFormulaRef.cs" />
+    <Compile Include="Formulas\IConvertFormula.cs" />
+    <Compile Include="Formulas\IConvertFormulaRef.cs" />
+    <Compile Include="Formulas\IEqualFormula.cs" />
+    <Compile Include="Formulas\IEqualFormulaRef.cs" />
+    <Compile Include="Formulas\IExclusiveOrFormula.cs" />
+    <Compile Include="Formulas\IExclusiveOrFormulaRef.cs" />
+    <Compile Include="Formulas\IFormula.cs" />
+    <Compile Include="Formulas\IFormulaRef.cs" />
+    <Compile Include="Formulas\IFormulaVisitor.cs" />
+    <Compile Include="Formulas\IMethodCallFormula.cs" />
+    <Compile Include="Formulas\IMethodCallFormulaRef.cs" />
+    <Compile Include="Formulas\IMultiplyFormula.cs" />
+    <Compile Include="Formulas\IMultiplyFormulaRef.cs" />
+    <Compile Include="Formulas\INotEqualFormula.cs" />
+    <Compile Include="Formulas\INotEqualFormulaRef.cs" />
+    <Compile Include="Formulas\IReturnFormula.cs" />
+    <Compile Include="Formulas\IReturnFormulaRef.cs" />
+    <Compile Include="Formulas\ITypeAsFormula.cs" />
+    <Compile Include="Formulas\ITypeAsFormulaRef.cs" />
+    <Compile Include="Formulas\IUnaryFormula.cs" />
+    <Compile Include="Formulas\IUnaryFormulaRef.cs" />
+    <Compile Include="Formulas\IVariableFormula.cs" />
+    <Compile Include="Formulas\IVariableFormulaRef.cs" />
+    <Compile Include="Formulas\MethodCallFormula.cs" />
+    <Compile Include="Formulas\MethodCallFormulaRef.cs" />
+    <Compile Include="Formulas\MultiplyFormula.cs" />
+    <Compile Include="Formulas\MultiplyFormulaRef.cs" />
+    <Compile Include="Formulas\NodeType.cs" />
+    <Compile Include="Formulas\NotEqualFormula.cs" />
+    <Compile Include="Formulas\NotEqualFormulaRef.cs" />
+    <Compile Include="Formulas\ReturnFormula.cs" />
+    <Compile Include="Formulas\ReturnFormulaRef.cs" />
+    <Compile Include="Formulas\TypeAsFormula.cs" />
+    <Compile Include="Formulas\TypeAsFormulaRef.cs" />
+    <Compile Include="Formulas\UnaryFormula.cs" />
+    <Compile Include="Formulas\VariableFormula.cs" />
+    <Compile Include="Formulas\VariableFormulaRef.cs" />
+    <Compile Include="Mixins\System\Linq\Expressions\ExpressionMixin.cs" />
+    <Compile Include="Mock\ReflectiveMethodDesigner.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
