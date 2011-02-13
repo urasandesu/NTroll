@@ -61,6 +61,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.FormulaSa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.NTroll.FormulaSample3", "Test.Urasandesu.NTroll.FormulaSample3\Test.Urasandesu.NTroll.FormulaSample3.csproj", "{D92B4577-F1C7-4274-89E2-405D278CC805}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.NTroll.FormulaSample4", "Test.Urasandesu.NTroll.FormulaSample4\Test.Urasandesu.NTroll.FormulaSample4.csproj", "{90F11A33-6FCA-4A2D-A878-4D818B67A3E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NTroll.FormulaSample4", "Urasandesu.NTroll.FormulaSample4\Urasandesu.NTroll.FormulaSample4.csproj", "{FEB6E732-298C-40FC-A459-A9F500D65085}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +191,14 @@ Global
 		{D92B4577-F1C7-4274-89E2-405D278CC805}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D92B4577-F1C7-4274-89E2-405D278CC805}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D92B4577-F1C7-4274-89E2-405D278CC805}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F11A33-6FCA-4A2D-A878-4D818B67A3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F11A33-6FCA-4A2D-A878-4D818B67A3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F11A33-6FCA-4A2D-A878-4D818B67A3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F11A33-6FCA-4A2D-A878-4D818B67A3E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEB6E732-298C-40FC-A459-A9F500D65085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEB6E732-298C-40FC-A459-A9F500D65085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEB6E732-298C-40FC-A459-A9F500D65085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEB6E732-298C-40FC-A459-A9F500D65085}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
