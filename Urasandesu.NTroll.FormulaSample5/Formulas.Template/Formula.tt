@@ -1,0 +1,16 @@
+﻿<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+<#@ output extension="g.cs" #>
+<#@ include file="T4Toolbox.tt" #>
+<#@ include file="FormulaTemplateProperty.tt" #>
+<#@ include file="FormulaTemplate.tt" #>
+<#
+	var ft = new FormulaTemplate();
+	ft.BaseTypeName = "Node";
+	ft.TypeName = "Formula";
+	ft.IsAbstract = true;
+	ft.ProhibitsGenerating3rdConstructor = true;
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "Referrer", TypeName = "Formula", Default = "new NullFormula()", PrevPropertyName = null });
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "NodeType", TypeName = "Item<FormulaType>", Default = "new Item<FormulaType>()", PrevPropertyName = "Referrer" });
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "TypeDeclaration", TypeName = "Item<ITypeDeclaration>", Default = "new Item<ITypeDeclaration>()", PrevPropertyName = "NodeType" });
+	ft.Render();
+#>

@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A8AA01D6-3ECD-4CE1-AA1B-84A03D43FAEC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Urasandesu.NTroll.FormulaSample5</RootNamespace>
+    <AssemblyName>Urasandesu.NTroll.FormulaSample5</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Urasandesu.NAnonym, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Formulas.Template\BinaryFormula.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BinaryFormula.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.Template\BlockFormula.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BlockFormula.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.Template\ConstantFormula.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConstantFormula.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.Template\Formula.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Formula.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.Template\VariableFormula.g.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VariableFormula.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas\AssignFormula.cs" />
+    <Compile Include="Formulas\BinaryFormula.cs" />
+    <Compile Include="Formulas\BlockFormula.cs" />
+    <Compile Include="Formulas\ConstantFormula.cs" />
+    <Compile Include="Formulas\ExpressionToFormula.cs" />
+    <Compile Include="Formulas\ExpressionToFormulaState.cs" />
+    <Compile Include="Formulas\ExpressionToInlineValue.cs" />
+    <Compile Include="Formulas\Hierarchy.cs" />
+    <Compile Include="Formulas\Node.cs" />
+    <Compile Include="Formulas\Formula.cs" />
+    <Compile Include="Formulas\IFormulaVisitor.cs" />
+    <Compile Include="Formulas\Item.cs" />
+    <Compile Include="Formulas\NodeMixin.cs" />
+    <Compile Include="Formulas\FormulaCollection.cs" />
+    <Compile Include="Formulas\FormulaType.cs" />
+    <Compile Include="Formulas\NullBlockFormula.cs" />
+    <Compile Include="Formulas\NullFormula.cs" />
+    <Compile Include="Formulas\VariableFormula.cs" />
+    <Compile Include="Mock\ReflectiveMethodDesigner.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Formulas.Template\BinaryFormula.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BinaryFormula.g.cs</LastGenOutput>
+    </None>
+    <None Include="Formulas.Template\BlockFormula.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BlockFormula.g.cs</LastGenOutput>
+    </None>
+    <None Include="Formulas.Template\ConstantFormula.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConstantFormula.g.cs</LastGenOutput>
+    </None>
+    <None Include="Formulas.Template\Formula.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Formula.g.cs</LastGenOutput>
+    </None>
+    <None Include="Formulas.Template\FormulaTemplate.tt">
+    </None>
+    <None Include="Formulas.Template\FormulaTemplateProperty.tt">
+    </None>
+    <None Include="Formulas.Template\VariableFormula.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>VariableFormula.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

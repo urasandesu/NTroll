@@ -1,0 +1,9 @@
+﻿<#+
+public class FormulaTemplateProperty
+{
+	public string Name { get; set; }
+	public string TypeName { get; set; }
+	public string Default { get; set; }
+	public string PrevPropertyName { get; set; }
+}
+#>

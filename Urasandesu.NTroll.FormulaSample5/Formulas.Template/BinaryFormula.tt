@@ -1,0 +1,15 @@
+﻿<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+<#@ output extension="g.cs" #>
+<#@ include file="T4Toolbox.tt" #>
+<#@ include file="FormulaTemplateProperty.tt" #>
+<#@ include file="FormulaTemplate.tt" #>
+<#
+	var ft = new FormulaTemplate();
+	ft.BaseTypeName = "Formula";
+	ft.TypeName = "BinaryFormula";
+	ft.IsAbstract = true;
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "Left", TypeName = "Formula", Default = "new NullFormula()", PrevPropertyName = "TypeDeclaration" });
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "Method", TypeName = "Item<IMethodDeclaration>", Default = "new Item<IMethodDeclaration>()", PrevPropertyName = "Left" });
+	ft.Properties.Add(new FormulaTemplateProperty() { Name = "Right", TypeName = "Formula", Default = "new NullFormula()", PrevPropertyName = "Method" });
+	ft.Render();
+#>

@@ -1,0 +1,119 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Urasandesu.NAnonym" #>
+<#@ import namespace="Urasandesu.NTroll.FormulaSample5.Formulas" #>
+<#@ assembly name="C:\Documents and Settings\Administrator\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll" #>
+<#@ assembly name="C:\Documents and Settings\Administrator\NTroll\Urasandesu.NTroll.FormulaSample5\bin\Debug\Urasandesu.NTroll.FormulaSample5.dll" #>
+<#+
+
+public class FormulaTemplate : Template
+{
+	public FormulaTemplate()
+		: base()
+	{
+		Properties = new List<FormulaTemplateProperty>();
+	}
+	
+	public string BaseTypeName { get; set; }
+	public string TypeName { get; set; }
+	public bool IsAbstract { get; set; }
+	public FormulaType NodeType { get; set; }
+	public bool ProhibitsGenerating1stConstructor { get; set; }
+	public bool ProhibitsGenerating2ndConstructor { get; set; }
+	public bool ProhibitsGenerating3rdConstructor { get; set; }
+	public List<FormulaTemplateProperty> Properties { get; set; }
+	
+	public override string TransformText()
+	{
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Urasandesu.NAnonym.ILTools;
+
+namespace Urasandesu.NTroll.FormulaSample5.Formulas
+{
+    public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> : <#= BaseTypeName #>
+    {
+<#+ 
+		if (!ProhibitsGenerating1stConstructor && !ProhibitsGenerating2ndConstructor && !ProhibitsGenerating3rdConstructor)
+		{
+#>
+        public <#= TypeName #>()
+            : this(default(string), default(bool))
+        {
+        }
+
+        public <#= TypeName #>(bool prohibitsInitProperties)
+            : this(default(string), prohibitsInitProperties)
+        {
+        }
+
+        public <#= TypeName #>(string name, bool prohibitsInitProperties)
+            : base(name, FormulaType.<#= NodeType.ToString() #>)
+        {
+			if (!prohibitsInitProperties)
+			{
+<#+ 
+			foreach (var property in Properties)
+			{
+#>
+	            Properties.Insert(<#= property.Name #>Index, default(Node));
+				<#= property.Name #> = <#= property.Default #>;
+<#+ 
+			}
+#>
+			}
+        }
+<#+  
+		}
+		else if (!ProhibitsGenerating1stConstructor && !ProhibitsGenerating2ndConstructor)
+		{
+#>
+        public <#= TypeName #>()
+            : this(default(bool))
+        {
+        }
+
+        public <#= TypeName #>(bool prohibitsInitProperties)
+            : base(default(string))
+        {
+			if (!prohibitsInitProperties)
+			{
+<#+ 
+			foreach (var property in Properties)
+			{
+#>
+	            Properties.Insert(<#= property.Name #>Index, default(Node));
+				<#= property.Name #> = <#= property.Default #>;
+<#+ 
+			}
+#>
+			}
+        }
+<#+ 
+		}
+#>
+<#+ 
+		foreach (var property in Properties)
+		{
+#>
+        public static readonly int <#= property.Name #>Index = <#+ if (!string.IsNullOrEmpty(property.PrevPropertyName)) { #> <#= property.PrevPropertyName #>Index + 1; <#+ } else { #>0; <#+ } #>
+		
+        protected <#= property.TypeName #> Get<#= property.Name #>() { return (<#= property.TypeName #>)Properties[<#= property.Name #>Index]; }
+        protected <#= property.TypeName #> Set<#= property.Name #>(<#= property.TypeName #> value) { value.Name = "<#= property.Name #>"; Properties[<#= property.Name #>Index] = value; return value; }
+        <#= property.TypeName #> <#= property.Name.ToCamel() #>;
+        public <#= property.TypeName #> <#= property.Name #> { get { return <#= property.Name.ToCamel() #>; } set { <#= property.Name.ToCamel() #> = Set<#= property.Name #>(CheckCanModify(value)); } }
+
+<#+ 
+		}
+#>
+    }
+}
+
+<#+
+		
+        return this.GenerationEnvironment.ToString();
+	}
+}
+#>
