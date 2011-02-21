@@ -16,17 +16,11 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         IList _list;
 
         public FormulaCollection()
-            : this(default(string))
         {
+            Initialize(new Collection<TFormula>());
         }
 
-        public FormulaCollection(string name)
-            : this(new Collection<TFormula>())
-        {
-            Name = name;
-        }
-
-        public FormulaCollection(IList<TFormula> list)
+        void Initialize(IList<TFormula> list)
         {
             if (!(list is IList)) 
                 throw new ArgumentException("The parameter must implement System.Collections.IList.", TypeSavable.GetName(() => list));
@@ -35,6 +29,11 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             _list = (IList)list;
         }
 
+        Formula referrer = new NullFormula();
+        public Formula Referrer { get { return referrer; } set { referrer = CheckCanModify(value); } }
+
+        #region IList<TFormula>, ICollection<TFormula>, IEnumerable<TFormula>, IList, ICollection, IEnumerable
+
         public int IndexOf(TFormula item)
         {
             return list.IndexOf(item);
@@ -42,11 +41,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public void Insert(int index, TFormula item)
         {
+            item.Referrer = Referrer;
             list.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
+            list[index].Referrer = new NullFormula();
             list.RemoveAt(index);
         }
 
@@ -58,17 +59,23 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             set
             {
+                list[index].Referrer = Referrer;
                 list[index] = value;
             }
         }
 
         public void Add(TFormula item)
         {
+            item.Referrer = Referrer;
             list.Add(item);
         }
 
         public void Clear()
         {
+            foreach (var item in list)
+            {
+                item.Referrer = new NullFormula();
+            }
             list.Clear();
         }
 
@@ -94,6 +101,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public bool Remove(TFormula item)
         {
+            item.Referrer = new NullFormula();
             return list.Remove(item);
         }
 
@@ -109,11 +117,16 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         int IList.Add(object value)
         {
+            ((Formula)value).Referrer = Referrer;
             return _list.Add(value);
         }
 
         void IList.Clear()
         {
+            foreach (Formula item in _list)
+            {
+                item.Referrer = new NullFormula();
+            }
             _list.Clear();
         }
 
@@ -129,6 +142,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         void IList.Insert(int index, object value)
         {
+            ((Formula)value).Referrer = Referrer;
             _list.Insert(index, value);
         }
 
@@ -144,11 +158,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         void IList.Remove(object value)
         {
+            ((Formula)value).Referrer = new NullFormula();
             _list.Remove(value);
         }
 
         void IList.RemoveAt(int index)
         {
+            ((Formula)_list[index]).Referrer = new NullFormula();
             _list.RemoveAt(index);
         }
 
@@ -160,6 +176,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             set
             {
+                ((Formula)_list[index]).Referrer = Referrer;
                 _list[index] = value;
             }
         }
@@ -182,6 +199,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         object ICollection.SyncRoot
         {
             get { return _list.SyncRoot; }
+        }
+
+        #endregion
+
+        protected override Node PinCore()
+        {
+            Initialize(new ReadOnlyCollection<TFormula>(list));
+            return base.PinCore();
         }
 
         public override void AppendContentTo(StringBuilder sb)

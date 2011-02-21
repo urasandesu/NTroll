@@ -49,30 +49,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Formulas.Template\BinaryFormula.g.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Include="Formulas.CodeGeneration\BinaryFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BinaryFormula.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Formulas.Template\BlockFormula.g.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Include="Formulas.CodeGeneration\BlockFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BlockFormula.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Formulas.Template\ConstantFormula.g.cs">
-      <AutoGen>True</AutoGen>
+    <Compile Include="Formulas.CodeGeneration\ConstantFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+      <SubType>Code</SubType>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ConstantFormula.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Formulas.Template\Formula.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Formula.tt</DependentUpon>
+    <Compile Include="Formulas.CodeGeneration\Formula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
-    <Compile Include="Formulas.Template\VariableFormula.g.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>VariableFormula.tt</DependentUpon>
+    <Compile Include="Formulas.CodeGeneration\VariableFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas\AssignFormula.cs" />
     <Compile Include="Formulas\BinaryFormula.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="Formulas\ExpressionToFormula.cs" />
     <Compile Include="Formulas\ExpressionToFormulaState.cs" />
     <Compile Include="Formulas\ExpressionToInlineValue.cs" />
-    <Compile Include="Formulas\Hierarchy.cs" />
     <Compile Include="Formulas\Node.cs" />
     <Compile Include="Formulas\Formula.cs" />
     <Compile Include="Formulas\IFormulaVisitor.cs" />
@@ -96,33 +94,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Formulas.Template\BinaryFormula.tt">
+    <None Include="Formulas.CodeGeneration\FormulaGenerator.tt">
+    </None>
+    <None Include="Formulas.CodeGeneration\Formulas.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BinaryFormula.g.cs</LastGenOutput>
+      <LastGenOutput>Formulas.txt</LastGenOutput>
     </None>
-    <None Include="Formulas.Template\BlockFormula.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>BlockFormula.g.cs</LastGenOutput>
+    <None Include="Formulas.CodeGeneration\FormulaTemplate.tt">
     </None>
-    <None Include="Formulas.Template\ConstantFormula.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConstantFormula.g.cs</LastGenOutput>
-    </None>
-    <None Include="Formulas.Template\Formula.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Formula.g.cs</LastGenOutput>
-    </None>
-    <None Include="Formulas.Template\FormulaTemplate.tt">
-    </None>
-    <None Include="Formulas.Template\FormulaTemplateProperty.tt">
-    </None>
-    <None Include="Formulas.Template\VariableFormula.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>VariableFormula.g.cs</LastGenOutput>
+    <None Include="Formulas.CodeGeneration\FormulaTemplateProperty.tt">
     </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Formulas.CodeGeneration\Formulas.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -132,4 +123,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(TargetPath).locked" del "$(TargetPath).locked"
+if exist "$(TargetPath)" if not exist "$(TargetPath).locked" move "$(TargetPath)" "$(TargetPath).locked"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

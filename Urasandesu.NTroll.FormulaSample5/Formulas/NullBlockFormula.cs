@@ -8,12 +8,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public class NullBlockFormula : BlockFormula
     {
         public NullBlockFormula()
-            : base(default(string), true)
-        {
-        }
-
-        public NullBlockFormula(string name)
-            : base(name, true)
+            : base(true)
         {
         }
 

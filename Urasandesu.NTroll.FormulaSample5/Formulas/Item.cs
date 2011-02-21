@@ -9,23 +9,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public class Item<T> : Node
     {
-        public Item()
-            : this(default(string))
-        {
-        }
-
-        public Item(string name)
-            : this(name, default(T))
-        {
-        }
-
-        public Item(string name, T value)
-            : base()
-        {
-            this.Name = name;
-            this.value = value;
-        }
-
         T value = default(T);
         public T Value { get { return this.value; } set { this.value = CheckCanModify(value); } }
 

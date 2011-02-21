@@ -26,9 +26,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         IList<Node> properties = new Collection<Node>();
         public IList<Node> Properties { get { return properties; } set { properties = CheckCanModify(value); } }
 
-        Hierarchy hierarchy = new Hierarchy();
-        public Hierarchy Hierarchy { get { return hierarchy; } }
-
         protected override Node PinCore()
         {
             properties = new ReadOnlyCollection<Node>(properties);
@@ -45,17 +42,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public void AppendFormulaContentTo(StringBuilder sb)
         {
             sb.Append("{");
-            Hierarchy.DoIfFirstLevel(() => Referrer.AppendTo(sb), () => sb.Append("\"Abbreviated ...\""));
-            for (int propertyIndex = ReferrerIndex + 1; propertyIndex < Properties.Count; propertyIndex++)
+            for (int propertiesIndex = ReferrerIndex + 1; propertiesIndex < Properties.Count; propertiesIndex++)
             {
-                var property = Properties[propertyIndex];
-                sb.Append(", ");
-                OnPropertyAppending(property, propertyIndex, sb);
+                var property = Properties[propertiesIndex];
+                if (ReferrerIndex + 1 < propertiesIndex)
+                {
+                    sb.Append(", ");
+                }
+                OnPropertyAppending(property, propertiesIndex, sb);
             }
             sb.Append("}");
         }
 
-        protected virtual void OnPropertyAppending(Node property, int propertyIndex, StringBuilder sb)
+        protected virtual void OnPropertyAppending(Node property, int propertiesIndex, StringBuilder sb)
         {
             property.AppendTo(sb);
         }

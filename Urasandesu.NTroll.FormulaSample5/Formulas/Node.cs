@@ -7,16 +7,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public abstract class Node
     {
-        public Node()
-            : this(default(string))
-        {
-        }
-
-        public Node(string name)
-        {
-            Name = name;
-        }
-
         public bool IsPinned { get; private set; }
 
         string name;

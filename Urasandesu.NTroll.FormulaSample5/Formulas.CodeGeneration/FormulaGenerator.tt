@@ -1,0 +1,21 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+<#@ include file="FormulaTemplate.tt" #>
+<#+
+public class FormulaGenerator : Generator
+{
+	public FormulaGenerator()
+	{
+		Templates = new List<FormulaTemplate>();
+	}
+	
+	public List<FormulaTemplate> Templates { get; private set; }
+	
+	protected override void RunCore()
+	{
+		foreach (var template in Templates)
+		{
+			template.RenderToFile(template.TypeName + ".g.cs");
+		}
+	}
+}
+#>
