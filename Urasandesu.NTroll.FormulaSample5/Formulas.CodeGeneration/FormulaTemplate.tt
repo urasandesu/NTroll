@@ -1,6 +1,9 @@
-﻿<#@ import namespace="System.Collections.Generic" #>
+﻿<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="Urasandesu.NAnonym" #>
+<#@ import namespace="Urasandesu.NAnonym.Linq" #>
 <#@ import namespace="Urasandesu.NTroll.FormulaSample5.Formulas" #>
+<#@ assembly name="System.Core" #>
 <#@ assembly name="C:\Documents and Settings\Administrator\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll" #>
 <#@ assembly name="C:\Documents and Settings\Administrator\NTroll\Urasandesu.NTroll.FormulaSample5\bin\Debug\Urasandesu.NTroll.FormulaSample5.dll" #>
 <#+
@@ -16,7 +19,7 @@ public class FormulaTemplate : Template
 	public string BaseTypeName { get; set; }
 	public string TypeName { get; set; }
 	public bool IsAbstract { get; set; }
-	public FormulaType NodeType { get; set; }
+	public NodeType NodeType { get; set; }
 	public List<FormulaTemplateProperty> TemplateProperties { get; set; }
 	
 	public override string TransformText()
@@ -30,21 +33,16 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> : <#= BaseTypeName #>
+    public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> <#= BaseTypeName == null ? "" : ": " + BaseTypeName #>
     {
         public <#= TypeName #>()
-            : this(default(bool))
-        {
-        }
-
-        public <#= TypeName #>(bool prohibitsInitProperties)
             : base()
         {
 <#+ 
-		if (BaseTypeName == "Formula")
+		if (BaseTypeName != null)
 		{
 #>
-			NodeType.Value = FormulaType.<#= NodeType.ToString() #>;
+			NodeType = NodeType.<#= NodeType.ToString() #>;
 <#+ 
 		}
 #>
@@ -52,70 +50,131 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 			foreach (var property in TemplateProperties)
 			{
 #>
-            Properties.Insert(<#= property.Name #>Index, default(Node));
+			<#= property.Name #> = <#= property.Default #>;
 <#+ 
 			}
 #>
-			if (!prohibitsInitProperties)
-			{
-<#+ 
-			foreach (var property in TemplateProperties)
-			{
-#>
-				<#= property.Name #> = <#= property.Default #>;
-<#+ 
-			}
-#>
-			}
         }
+
 <#+ 
 		foreach (var property in TemplateProperties)
 		{
 #>
-        public static readonly int <#= property.Name #>Index = <#+ if (!string.IsNullOrEmpty(property.PrevPropertyName)) { #> <#= property.PrevPropertyName #>Index + 1; <#+ } else { #>0; <#+ } #>
-		
-        protected <#= property.TypeName #> Get<#= property.Name #>() 
-		{ 
-			return (<#= property.TypeName #>)Properties[<#= property.Name #>Index]; 
-		}
-        protected <#= property.TypeName #> Set<#= property.Name #>(<#= property.TypeName #> value) 
-		{ 
-<#+ 
-		if (!property.ProhibitsSetName)
-		{
-#>
-			value.Name = "<#= property.Name #>";
-<#+ 
-		}
-#>
-<#+ 
-		if (!property.ProhibitsSetReferrer) 
-		{ 
-#>
-			value.Referrer = this; 
-<#+ 
-		} 
-#>
-			Properties[<#= property.Name #>Index] = value; 
-			return value; 
-		}
         <#= property.TypeName #> <#= property.Name.ToCamel() #>;
         public <#= property.TypeName #> <#= property.Name #> 
 		{ 
 			get { return <#= property.Name.ToCamel() #>; } 
-			set { <#= property.Name.ToCamel() #> = Set<#= property.Name #>(CheckCanModify(value)); } 
+			set { <#= property.Name.ToCamel() #> = CheckCanModify(value); } 
 		}
-
-
+<#+ 
+			if (property.HasDefaultExpandString)
+			{
+#>
+		public abstract string <#= property.Name #>DefaultExpandString { get; }
+<#+ 
+			}
+#>
+<#+ 
+		}
+		
+		if (!IsAbstract)
+		{
+#>
+        public override Formula Accept(IFormulaVisitor visitor)
+        {
+			return visitor.Visit(this);
+        }
 <#+ 
 		}
 #>
+		
+        public <#= BaseTypeName == null ? "virtual" : "override" #> void AppendTo(StringBuilder sb)
+		{
+<#+  
+		if (!IsAbstract)
+		{
+#>
+			sb.Append("{");
+<#+ 
+		}
+#>
+<#+ 
+		if (BaseTypeName != null)
+		{
+#>
+			base.AppendTo(sb);
+<#+ 
+		}
+#>
+<#+ 
+		TemplateProperties.Where(_ => !_.ProhibitsExpandString).ForEach(
+		(property, propertyIndex) =>
+		{
+			if (BaseTypeName != null || 0 < propertyIndex)
+			{
+#>
+			sb.Append(", ");
+<#+
+			}			
+			WriteAppendingProperty(property);
+		});
+#>
+<#+  
+		if (!IsAbstract)
+		{
+#>
+			sb.Append("}");
+<#+ 
+		}
+#>
+		}
     }
 }
 
 <#+
 		
         return this.GenerationEnvironment.ToString();
+	}
+	
+	void WriteAppendingProperty(FormulaTemplateProperty property)
+	{
+#>
+			sb.Append("\"<#= property.Name #>\": ");
+<#+ 
+		if (-1 < property.TypeName.IndexOf("Formula"))
+		{
+#>
+            if (<#= property.Name #> == null)
+            {
+                sb.Append("null");
+            }
+            else
+            {
+                <#= property.Name #>.AppendTo(sb);
+            }
+<#+  
+		}
+		else
+		{
+#>
+<#+ 
+			if (!property.HasDefaultExpandString)
+			{
+#>
+			AppendValueTo(<#= property.Name #>, sb);
+<#+ 
+			}
+			else
+			{
+#>
+			AppendValueTo(<#= property.Name #>, sb, <#= property.Name #>DefaultExpandString);
+<#+ 
+			}
+#>
+<#+ 
+		}
+#>
+<#+ 
 	}
 }
 #>

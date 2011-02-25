@@ -12,13 +12,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public ConstantFormula(object value, Type type)
             : this()
         {
-            ConstantValue.Value = value;
-            TypeDeclaration.Value = type.ToTypeDecl();
-        }
-
-        public override Formula Accept(IFormulaVisitor visitor)
-        {
-            throw new NotImplementedException();
+            ConstantValue = value;
+            TypeDeclaration = type.ToTypeDecl();
         }
     }
 }

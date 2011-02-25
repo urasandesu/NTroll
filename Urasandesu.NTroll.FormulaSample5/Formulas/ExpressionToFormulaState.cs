@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
+using Urasandesu.NAnonym.Linq;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    class ExpressionToFormulaState
+    public class ExpressionToFormulaState
     {
         public ExpressionToFormulaState()
         {
-            CurrentBlock = new NullBlockFormula();
+            CurrentBlock = null;
             PushBlock();
             Arguments = new Collection<Formula>();
+            Conditions = new Collection<ConditionalFormula>();
         }
 
         public void PushBlock()
@@ -22,7 +24,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public void PopBlock()
         {
-            if (CurrentBlock is NullBlockFormula)
+            if (CurrentBlock == null)
             {
                 throw new InvalidOperationException();
             }
@@ -34,5 +36,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public BlockFormula CurrentBlock { get; private set; }
         public Collection<Formula> Arguments { get; private set; }
+        public Collection<ConditionalFormula> Conditions { get; private set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿<#@ import namespace="System.Collections.Generic" #>
 <#@ include file="FormulaTemplate.tt" #>
+<#@ include file="FormulaVisitorTemplate.tt" #>
 <#+
 public class FormulaGenerator : Generator
 {
@@ -16,6 +17,10 @@ public class FormulaGenerator : Generator
 		{
 			template.RenderToFile(template.TypeName + ".g.cs");
 		}
+		
+		var visitorTemplate = new FormulaVisitorTemplate();
+		visitorTemplate.Templates.AddRange(Templates);
+		visitorTemplate.RenderToFile("IFormulaVisitor.g.cs");
 	}
 }
 #>

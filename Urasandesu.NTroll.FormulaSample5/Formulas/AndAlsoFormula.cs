@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class BlockFormula : Formula
+    public partial class AndAlsoFormula : BinaryFormula
     {
-        public override Formula Accept(IFormulaVisitor visitor)
+        public override string MethodDefaultExpandString
         {
-            throw new NotImplementedException();
+            get { return "\"&&\""; }
         }
     }
 }

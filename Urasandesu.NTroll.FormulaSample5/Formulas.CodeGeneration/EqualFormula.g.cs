@@ -6,21 +6,14 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class VariableFormula : Formula
+    public partial class EqualFormula : BinaryFormula
     {
-        public VariableFormula()
+        public EqualFormula()
             : base()
         {
-			NodeType = NodeType.Variable;
-			VariableName = default(string);
+			NodeType = NodeType.Equal;
         }
 
-        string variableName;
-        public string VariableName 
-		{ 
-			get { return variableName; } 
-			set { variableName = CheckCanModify(value); } 
-		}
         public override Formula Accept(IFormulaVisitor visitor)
         {
 			return visitor.Visit(this);
@@ -30,9 +23,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 		{
 			sb.Append("{");
 			base.AppendTo(sb);
-			sb.Append(", ");
-			sb.Append("\"VariableName\": ");
-			AppendValueTo(VariableName, sb);
 			sb.Append("}");
 		}
     }

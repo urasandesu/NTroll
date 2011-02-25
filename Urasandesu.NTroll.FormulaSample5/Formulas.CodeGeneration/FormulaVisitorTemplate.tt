@@ -1,0 +1,38 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+<#+
+public class FormulaVisitorTemplate : Template
+{
+	public FormulaVisitorTemplate()
+	{
+		Templates = new List<FormulaTemplate>();
+	}
+
+	public List<FormulaTemplate> Templates { get; private set; }
+	
+	public override string TransformText()
+	{
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Urasandesu.NTroll.FormulaSample5.Formulas
+{
+    public interface IFormulaVisitor
+    {
+<#+ 
+		foreach (var template in Templates)
+		{
+#>
+        Formula Visit(<#= template.TypeName #> formula);
+<#+ 
+		}
+#>
+    }
+}
+<#+ 
+        return this.GenerationEnvironment.ToString();
+	}
+}
+#>

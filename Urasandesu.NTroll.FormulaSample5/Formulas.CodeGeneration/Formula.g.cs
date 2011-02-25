@@ -6,82 +6,43 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class Formula : Node
+    public abstract partial class Formula 
     {
         public Formula()
-            : this(default(bool))
-        {
-        }
-
-        public Formula(bool prohibitsInitProperties)
             : base()
         {
-            Properties.Insert(ReferrerIndex, default(Node));
-            Properties.Insert(NodeTypeIndex, default(Node));
-            Properties.Insert(TypeDeclarationIndex, default(Node));
-			if (!prohibitsInitProperties)
-			{
-				Referrer = new NullFormula();
-				NodeType = new Item<FormulaType>();
-				TypeDeclaration = new Item<ITypeDeclaration>();
-			}
+			Referrer = default(Formula);
+			NodeType = NodeType.None;
+			TypeDeclaration = default(ITypeDeclaration);
         }
-        public static readonly int ReferrerIndex = 0; 		
-        protected Formula GetReferrer() 
-		{ 
-			return (Formula)Properties[ReferrerIndex]; 
-		}
-        protected Formula SetReferrer(Formula value) 
-		{ 
-			Properties[ReferrerIndex] = value; 
-			return value; 
-		}
+
         Formula referrer;
         public Formula Referrer 
 		{ 
 			get { return referrer; } 
-			set { referrer = SetReferrer(CheckCanModify(value)); } 
+			set { referrer = CheckCanModify(value); } 
 		}
-
-
-        public static readonly int NodeTypeIndex =  ReferrerIndex + 1; 		
-        protected Item<FormulaType> GetNodeType() 
-		{ 
-			return (Item<FormulaType>)Properties[NodeTypeIndex]; 
-		}
-        protected Item<FormulaType> SetNodeType(Item<FormulaType> value) 
-		{ 
-			value.Name = "NodeType";
-			Properties[NodeTypeIndex] = value; 
-			return value; 
-		}
-        Item<FormulaType> nodeType;
-        public Item<FormulaType> NodeType 
+        NodeType nodeType;
+        public NodeType NodeType 
 		{ 
 			get { return nodeType; } 
-			set { nodeType = SetNodeType(CheckCanModify(value)); } 
+			set { nodeType = CheckCanModify(value); } 
 		}
-
-
-        public static readonly int TypeDeclarationIndex =  NodeTypeIndex + 1; 		
-        protected Item<ITypeDeclaration> GetTypeDeclaration() 
-		{ 
-			return (Item<ITypeDeclaration>)Properties[TypeDeclarationIndex]; 
-		}
-        protected Item<ITypeDeclaration> SetTypeDeclaration(Item<ITypeDeclaration> value) 
-		{ 
-			value.Name = "TypeDeclaration";
-			Properties[TypeDeclarationIndex] = value; 
-			return value; 
-		}
-        Item<ITypeDeclaration> typeDeclaration;
-        public Item<ITypeDeclaration> TypeDeclaration 
+        ITypeDeclaration typeDeclaration;
+        public ITypeDeclaration TypeDeclaration 
 		{ 
 			get { return typeDeclaration; } 
-			set { typeDeclaration = SetTypeDeclaration(CheckCanModify(value)); } 
+			set { typeDeclaration = CheckCanModify(value); } 
 		}
-
-
+		
+        public virtual void AppendTo(StringBuilder sb)
+		{
+			sb.Append("\"NodeType\": ");
+			AppendValueTo(NodeType, sb);
+			sb.Append(", ");
+			sb.Append("\"TypeDeclaration\": ");
+			AppendValueTo(TypeDeclaration, sb);
+		}
     }
 }
 

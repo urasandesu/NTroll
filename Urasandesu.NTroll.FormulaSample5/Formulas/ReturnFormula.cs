@@ -5,7 +5,12 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public interface IFormulaVisitor
+    public partial class ReturnFormula : Formula
     {
+        public ReturnFormula(Formula body)
+            : this()
+        {
+            Body = body;
+        }
     }
 }

@@ -2,10 +2,9 @@
 public class FormulaTemplateProperty
 {
 	public string Name { get; set; }
-	public bool ProhibitsSetName { get; set; }
 	public string TypeName { get; set; }
 	public string Default { get; set; }
-	public bool ProhibitsSetReferrer { get; set; }
-	public string PrevPropertyName { get; set; }
+	public bool ProhibitsExpandString { get; set; }
+	public bool HasDefaultExpandString { get; set; }
 }
 #>

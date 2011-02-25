@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public enum FormulaType
+    public enum NodeType
     {
         None,
         Add,

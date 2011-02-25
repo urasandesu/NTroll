@@ -20,32 +20,32 @@ namespace Test.Urasandesu.NTroll.FormulaSample5.Mock
             var objValue = default(object);
             var value2 = default(int?);
             gen.Eval(() => Dsl.Allocate(value).As(10));
-            //gen.Eval(() => Dsl.If(value != 20 && value != 30 && value != 40 && value != 50));
-            //{
-            //    gen.Eval(() => Dsl.Allocate(objValue).As(value));
-            //    gen.Eval(() => Dsl.If(Dsl.Allocate(value2).As(objValue as int?) != null));
-            //    {
-            //        gen.Eval(() => Dsl.Return(value + value * value + (int)value2));
-            //    }
-            //    gen.Eval(() => Dsl.Else());
-            //    {
-            //        gen.Eval(() => Dsl.Return(value + value * value * value));
-            //    }
-            //    gen.Eval(() => Dsl.EndIf());
-            //}
-            //gen.Eval(() => Dsl.ElseIf(value == 20));
-            //{
-            //    gen.Eval(() => Dsl.Return(value));
-            //}
-            //gen.Eval(() => Dsl.ElseIf(value == 40));
-            //{
-            //    gen.Eval(() => Dsl.Return(value ^ value ^ value));
-            //}
-            //gen.Eval(() => Dsl.Else());
-            //{
-            //    gen.Eval(() => Dsl.Return(value == 30 ? value + value : value * value));
-            //}
-            //gen.Eval(() => Dsl.EndIf());
+            gen.Eval(() => Dsl.If(value != 20 && value != 30 && value != 40 && value != 50));
+            {
+                gen.Eval(() => Dsl.Allocate(objValue).As(value));
+                gen.Eval(() => Dsl.If(Dsl.Allocate(value2).As(objValue as int?) != null));
+                {
+                    gen.Eval(() => Dsl.Return(value + value * value + (int)value2));
+                }
+                gen.Eval(() => Dsl.Else());
+                {
+                    gen.Eval(() => Dsl.Return(value + value * value * value));
+                }
+                gen.Eval(() => Dsl.EndIf());
+            }
+            gen.Eval(() => Dsl.ElseIf(value == 20));
+            {
+                gen.Eval(() => Dsl.Return(value));
+            }
+            gen.Eval(() => Dsl.ElseIf(value == 40));
+            {
+                gen.Eval(() => Dsl.Return(value ^ value ^ value));
+            }
+            gen.Eval(() => Dsl.Else());
+            {
+                gen.Eval(() => Dsl.Return(value == 30 ? value + value : value * value));
+            }
+            gen.Eval(() => Dsl.EndIf());
             //gen.Eval(() => Dsl.End());
             Console.WriteLine(gen.Dump());
         }

@@ -18,7 +18,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Mock
 
         public void Eval(Expression<Action> exp)
         {
-            ExpressionToFormula.Eval(exp.Body, state);
+            exp.Body.EvalTo(state);
         }
 
         public string Dump()

@@ -6,13 +6,18 @@ using Urasandesu.NAnonym.Mixins.System;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class VariableFormula : Formula
+    public partial class TypeAsFormula : UnaryFormula
     {
-        public VariableFormula(string variableName, Type type)
+        public TypeAsFormula(Formula operand, Type type)
             : this()
         {
-            VariableName = variableName;
+            Operand = operand;
             TypeDeclaration = type.ToTypeDecl();
+        }
+
+        public override string MethodDefaultExpandString
+        {
+            get { return null; }
         }
     }
 }

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class AssignFormula : BinaryFormula
+    public partial class MultiplyFormula : BinaryFormula
     {
         public override string MethodDefaultExpandString
         {
-            get { return "\"=\""; }
+            get { return "\"*\""; }
         }
     }
 }

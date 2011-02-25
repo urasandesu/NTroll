@@ -6,24 +6,19 @@ using System.Linq.Expressions;
 using Urasandesu.NAnonym;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using Urasandesu.NAnonym.Linq;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    class ExpressionToInlineValue
+    public static class ExpressionToInlineValue
     {
-        protected ExpressionToInlineValue()
+        public static void Convert(this Expression exp, ExpressionToInlineValueState state)
         {
+            ConvertExpression(exp, state);
         }
 
-        public static object Convert(Expression exp)
+        public static void ConvertExpression(Expression exp, ExpressionToInlineValueState state)
         {
-            return ConvertExpression(exp);
-        }
-
-        static object ConvertExpression(Expression exp)
-        {
-            if (exp == null) return null;
-
             switch (exp.NodeType)
             {
                 case ExpressionType.Add:
@@ -39,13 +34,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 case ExpressionType.ArrayLength:
                     throw new NotImplementedException();
                 case ExpressionType.Call:
-                    return ConvertMethodCall((MethodCallExpression)exp);
+                    ConvertMethodCall((MethodCallExpression)exp, state);
+                    return;
                 case ExpressionType.Coalesce:
                     throw new NotImplementedException();
                 case ExpressionType.Conditional:
                     throw new NotImplementedException();
                 case ExpressionType.Constant:
-                    return ConvertConstant((ConstantExpression)exp);
+                    ConvertConstant((ConstantExpression)exp, state);
+                    return;
                 case ExpressionType.Convert:
                     throw new NotImplementedException();
                 case ExpressionType.ConvertChecked:
@@ -73,7 +70,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 case ExpressionType.ListInit:
                     throw new NotImplementedException();
                 case ExpressionType.MemberAccess:
-                    return ConvertMember((MemberExpression)exp);
+                    ConvertMember((MemberExpression)exp, state);
+                    return;
                 case ExpressionType.MemberInit:
                     throw new NotImplementedException();
                 case ExpressionType.Modulo:
@@ -123,40 +121,43 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
         }
 
-        static object ConvertMethodCall(MethodCallExpression exp)
+        public static void ConvertMethodCall(MethodCallExpression exp, ExpressionToInlineValueState state)
         {
             var parameter = new object[] { };
             if (exp.Arguments != null && 0 < exp.Arguments.Count)
             {
-                parameter = (object[])ConvertArguments(exp.Arguments).ToArray();
+                ConvertArguments(exp.Arguments, state);
+                parameter = new object[state.Arguments.Count];
+                state.Arguments.MoveTo(parameter);
             }
 
             if (exp.Object == null)
             {
-                return exp.Method.Invoke(null, parameter);
+                state.Result = exp.Method.Invoke(null, parameter);
             }
             else
             {
-                return exp.Method.Invoke(ConvertExpression(exp.Object), parameter);
+                ConvertExpression(exp.Object, state);
+                var instance = state.Result;
+                state.Result = exp.Method.Invoke(instance, parameter);
             }
         }
 
-        static ReadOnlyCollection<object> ConvertArguments(ReadOnlyCollection<Expression> exps)
+        public static void ConvertArguments(ReadOnlyCollection<Expression> exps, ExpressionToInlineValueState state)
         {
-            var arguments = new List<object>();
             foreach (var exp in exps)
             {
-                arguments.Add(ConvertExpression(exp));
+                ConvertExpression(exp, state);
+                state.Arguments.Add(state.Result);
             }
-            return new ReadOnlyCollection<object>(arguments);
         }
 
-        static object ConvertConstant(ConstantExpression exp)
+        public static void ConvertConstant(ConstantExpression exp, ExpressionToInlineValueState state)
         {
-            return exp.Value;
+            state.Result = exp.Value;
         }
 
-        static object ConvertMember(MemberExpression exp)
+        public static void ConvertMember(MemberExpression exp, ExpressionToInlineValueState state)
         {
             var fieldInfo = default(FieldInfo);
             var propertyInfo = default(PropertyInfo);
@@ -164,22 +165,30 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 if (exp.Expression == null)
                 {
-                    return fieldInfo.GetValue(null);
+                    state.Result = fieldInfo.GetValue(null);
+                    return;
                 }
                 else
                 {
-                    return fieldInfo.GetValue(ConvertExpression(exp.Expression));
+                    ConvertExpression(exp.Expression, state);
+                    var instance = state.Result;
+                    state.Result = fieldInfo.GetValue(instance);
+                    return;
                 }
             }
             else if ((propertyInfo = exp.Member as PropertyInfo) != null)
             {
                 if (exp.Expression == null)
                 {
-                    return propertyInfo.GetValue(null, null);
+                    state.Result = propertyInfo.GetValue(null, null);
+                    return;
                 }
                 else
                 {
-                    return propertyInfo.GetValue(ConvertExpression(exp.Expression), null);
+                    ConvertExpression(exp.Expression, state);
+                    var instance = state.Result;
+                    state.Result = propertyInfo.GetValue(instance, null);
+                    return;
                 }
             }
             else

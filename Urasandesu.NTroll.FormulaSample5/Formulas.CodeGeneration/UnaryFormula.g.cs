@@ -6,23 +6,16 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class BinaryFormula : Formula
+    public abstract partial class UnaryFormula : Formula
     {
-        public BinaryFormula()
+        public UnaryFormula()
             : base()
         {
 			NodeType = NodeType.None;
-			Left = default(Formula);
 			Method = default(IMethodDeclaration);
-			Right = default(Formula);
+			Operand = default(Formula);
         }
 
-        Formula left;
-        public Formula Left 
-		{ 
-			get { return left; } 
-			set { left = CheckCanModify(value); } 
-		}
         IMethodDeclaration method;
         public IMethodDeclaration Method 
 		{ 
@@ -30,38 +23,28 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 			set { method = CheckCanModify(value); } 
 		}
 		public abstract string MethodDefaultExpandString { get; }
-        Formula right;
-        public Formula Right 
+        Formula operand;
+        public Formula Operand 
 		{ 
-			get { return right; } 
-			set { right = CheckCanModify(value); } 
+			get { return operand; } 
+			set { operand = CheckCanModify(value); } 
 		}
 		
         public override void AppendTo(StringBuilder sb)
 		{
 			base.AppendTo(sb);
 			sb.Append(", ");
-			sb.Append("\"Left\": ");
-            if (Left == null)
-            {
-                sb.Append("null");
-            }
-            else
-            {
-                Left.AppendTo(sb);
-            }
-			sb.Append(", ");
 			sb.Append("\"Method\": ");
 			AppendValueTo(Method, sb, MethodDefaultExpandString);
 			sb.Append(", ");
-			sb.Append("\"Right\": ");
-            if (Right == null)
+			sb.Append("\"Operand\": ");
+            if (Operand == null)
             {
                 sb.Append("null");
             }
             else
             {
-                Right.AppendTo(sb);
+                Operand.AppendTo(sb);
             }
 		}
     }

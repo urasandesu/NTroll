@@ -6,57 +6,92 @@ using Urasandesu.NAnonym;
 using Urasandesu.NAnonym.ILTools;
 using Urasandesu.NAnonym.Linq;
 using System.Collections.ObjectModel;
+using System.Collections;
+using System.Runtime.Serialization;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class Formula : Node
+    public abstract partial class Formula
     {
-        public Formula(string name)
-            : this(name, default(FormulaType))
+        public bool IsPinned { get; private set; }
+
+        protected T CheckCanModify<T>(T value)
         {
+            if (IsPinned)
+            {
+                throw new NotSupportedException("This object has already pinned, so it can not modify.");
+            }
+            return value;
         }
 
-        public Formula(string name, FormulaType nodeType)
-            : this()
+        public static Formula Pin(Formula item)
         {
-            Name = name;
-            NodeType.Value = nodeType;
+            var pinned = item.PinCore();
+            pinned.IsPinned = true;
+            return pinned;
         }
 
-        IList<Node> properties = new Collection<Node>();
-        public IList<Node> Properties { get { return properties; } set { properties = CheckCanModify(value); } }
-
-        protected override Node PinCore()
+        public static void AppendListTo<TFormula>(IList<TFormula> formulas, StringBuilder sb)
+            where TFormula : Formula
         {
-            properties = new ReadOnlyCollection<Node>(properties);
-            return base.PinCore();
+            sb.Append("[");
+            var oneOrMore = false;
+            foreach (var formula in formulas)
+            {
+                if (!oneOrMore)
+                {
+                    oneOrMore = true;
+                    formula.AppendTo(sb);
+                }
+                else
+                {
+                    sb.Append(", ");
+                    formula.AppendTo(sb);
+                }
+            }
+            sb.Append("]");
+        }
+
+        public static void AppendValueTo<TValue>(TValue value, StringBuilder sb)
+        {
+            AppendValueTo(value, sb, null);
+        }
+
+        public static void AppendValueTo<TValue>(TValue value, StringBuilder sb, string ifDefault)
+        {
+            if (!(value is ValueType) && value.IsDefault())
+            {
+                sb.Append(ifDefault == null ? "null" : ifDefault);
+            }
+            else
+            {
+                var s = value.ToString();
+                var result = default(double);
+                if (double.TryParse(s, out result))
+                {
+                    sb.Append(s);
+                }
+                else
+                {
+                    sb.Append("\"");
+                    sb.Append(s);
+                    sb.Append("\"");
+                }
+            }
+        }
+
+        protected virtual Formula PinCore()
+        {
+            return this;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            AppendTo(sb);
+            return sb.ToString();
         }
 
         public abstract Formula Accept(IFormulaVisitor visitor);
-
-        public override void AppendContentTo(StringBuilder sb)
-        {
-            AppendFormulaContentTo(sb);
-        }
-
-        public void AppendFormulaContentTo(StringBuilder sb)
-        {
-            sb.Append("{");
-            for (int propertiesIndex = ReferrerIndex + 1; propertiesIndex < Properties.Count; propertiesIndex++)
-            {
-                var property = Properties[propertiesIndex];
-                if (ReferrerIndex + 1 < propertiesIndex)
-                {
-                    sb.Append(", ");
-                }
-                OnPropertyAppending(property, propertiesIndex, sb);
-            }
-            sb.Append("}");
-        }
-
-        protected virtual void OnPropertyAppending(Node property, int propertiesIndex, StringBuilder sb)
-        {
-            property.AppendTo(sb);
-        }
     }
 }

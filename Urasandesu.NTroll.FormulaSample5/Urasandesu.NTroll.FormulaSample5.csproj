@@ -49,46 +49,78 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formulas.CodeGeneration\AddFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\AndAlsoFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\AssignFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\BinaryFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
-      <SubType>Code</SubType>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\BlockFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
-      <SubType>Code</SubType>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ConditionalFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\ConstantFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
-      <SubType>Code</SubType>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ConvertFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\EqualFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ExclusiveOrFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\Formula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\IFormulaVisitor.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\MultiplyFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\NotEqualFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ReturnFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\TypeAsFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\UnaryFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\VariableFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas\AddFormula.cs" />
+    <Compile Include="Formulas\AndAlsoFormula.cs" />
     <Compile Include="Formulas\AssignFormula.cs" />
-    <Compile Include="Formulas\BinaryFormula.cs" />
-    <Compile Include="Formulas\BlockFormula.cs" />
     <Compile Include="Formulas\ConstantFormula.cs" />
+    <Compile Include="Formulas\ConvertFormula.cs" />
+    <Compile Include="Formulas\EqualFormula.cs" />
+    <Compile Include="Formulas\ExclusiveOrFormula.cs" />
     <Compile Include="Formulas\ExpressionToFormula.cs" />
     <Compile Include="Formulas\ExpressionToFormulaState.cs" />
     <Compile Include="Formulas\ExpressionToInlineValue.cs" />
-    <Compile Include="Formulas\Node.cs" />
+    <Compile Include="Formulas\ExpressionToInlineValueState.cs" />
     <Compile Include="Formulas\Formula.cs" />
-    <Compile Include="Formulas\IFormulaVisitor.cs" />
-    <Compile Include="Formulas\Item.cs" />
-    <Compile Include="Formulas\NodeMixin.cs" />
     <Compile Include="Formulas\FormulaCollection.cs" />
-    <Compile Include="Formulas\FormulaType.cs" />
-    <Compile Include="Formulas\NullBlockFormula.cs" />
-    <Compile Include="Formulas\NullFormula.cs" />
+    <Compile Include="Formulas\MultiplyFormula.cs" />
+    <Compile Include="Formulas\NodeType.cs" />
+    <Compile Include="Formulas\NotEqualFormula.cs" />
+    <Compile Include="Formulas\ReturnFormula.cs" />
+    <Compile Include="Formulas\TypeAsFormula.cs" />
     <Compile Include="Formulas\VariableFormula.cs" />
     <Compile Include="Mock\ReflectiveMethodDesigner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -103,6 +135,8 @@
     <None Include="Formulas.CodeGeneration\FormulaTemplate.tt">
     </None>
     <None Include="Formulas.CodeGeneration\FormulaTemplateProperty.tt">
+    </None>
+    <None Include="Formulas.CodeGeneration\FormulaVisitorTemplate.tt">
     </None>
   </ItemGroup>
   <ItemGroup>

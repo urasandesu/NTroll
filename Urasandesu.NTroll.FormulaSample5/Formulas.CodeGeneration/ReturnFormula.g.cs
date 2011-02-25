@@ -6,20 +6,20 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class VariableFormula : Formula
+    public partial class ReturnFormula : Formula
     {
-        public VariableFormula()
+        public ReturnFormula()
             : base()
         {
-			NodeType = NodeType.Variable;
-			VariableName = default(string);
+			NodeType = NodeType.Return;
+			Body = default(Formula);
         }
 
-        string variableName;
-        public string VariableName 
+        Formula body;
+        public Formula Body 
 		{ 
-			get { return variableName; } 
-			set { variableName = CheckCanModify(value); } 
+			get { return body; } 
+			set { body = CheckCanModify(value); } 
 		}
         public override Formula Accept(IFormulaVisitor visitor)
         {
@@ -31,8 +31,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 			sb.Append("{");
 			base.AppendTo(sb);
 			sb.Append(", ");
-			sb.Append("\"VariableName\": ");
-			AppendValueTo(VariableName, sb);
+			sb.Append("\"Body\": ");
+            if (Body == null)
+            {
+                sb.Append("null");
+            }
+            else
+            {
+                Body.AppendTo(sb);
+            }
 			sb.Append("}");
 		}
     }
