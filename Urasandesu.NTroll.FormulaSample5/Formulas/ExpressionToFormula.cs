@@ -319,6 +319,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordElseAttribute), false)) EvalElse(exp, state);
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordEndIfAttribute), false)) EvalEndIf(exp, state);
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordReturnAttribute), false)) EvalReturn(exp, state);
+                    else if (exp.Method.IsDefined(typeof(MethodReservedWordConstMemberAttribute), false)) EvalConstMember(exp, state);
                     else
                     {
                         throw new NotImplementedException();
@@ -353,6 +354,32 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                         //EvalInstanceMethodCall(exp, state);
                     }
                 }
+            }
+        }
+
+        public static void EvalConstMember(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Arguments[0].ConvertTo(state.InlineValueState);
+            var constMember = state.InlineValueState.Result;
+            exp.Arguments[1].ConvertTo(state.InlineValueState);
+            var type = (Type)state.InlineValueState.Result;
+            if (!state.ConstMembersCache.ContainsKey(type))
+            {
+                state.ConstMembersCache.Add(type, new Dictionary<object, FieldInfo>());
+                var fis = type.GetFields(BindingFlags.Public | BindingFlags.Static);
+                foreach (var fi in fis.Where(_ => _.IsInitOnly))
+                {
+                    state.ConstMembersCache[type].Add(fi.GetValue(null), fi);
+                }
+            }
+            if (!state.ConstMembersCache[type].ContainsKey(constMember))
+            {
+                throw new NotSupportedException("Dsl.ConstMember can only use to a field which is static and init only.");
+            }
+            else
+            {
+                var fi = state.ConstMembersCache[type][constMember];
+                state.CurrentBlock.Formulas.Push(new FieldFormula(null, fi));
             }
         }
 

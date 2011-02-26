@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using Urasandesu.NAnonym.Linq;
+using System.Reflection;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -16,6 +17,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Arguments = new Collection<Formula>();
             Conditions = new Collection<ConditionalFormula>();
             InlineValueState = new ExpressionToInlineValueState();
+            ConstMembersCache = new Dictionary<Type, Dictionary<object, FieldInfo>>();
         }
 
         public void PushBlock()
@@ -39,5 +41,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public Collection<Formula> Arguments { get; private set; }
         public Collection<ConditionalFormula> Conditions { get; private set; }
         public ExpressionToInlineValueState InlineValueState { get; private set; }
+        public Dictionary<Type, Dictionary<object, FieldInfo>> ConstMembersCache { get; private set; }
     }
 }

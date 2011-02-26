@@ -86,5 +86,19 @@ namespace Test.Urasandesu.NTroll.FormulaSample5.Mock
             gen.Eval(() => Dsl.Allocate(value).As((int)getValue.Invoke(null, new object[] { f2ValueField.GetValue(f2) })));
             Console.WriteLine(gen.Dump());
         }
+
+        [Test]
+        public void EvalTest03()
+        {
+            var gen = new ReflectiveMethodDesigner();
+            var opcode1 = default(OpCode);
+            var opcode2 = OpCodes.Add_Ovf;
+            gen.Eval(() => Dsl.Allocate(opcode1).As(Dsl.ConstMember(OpCodes.Add, typeof(OpCodes))));
+            for (int i = 0; i < 100; i++)
+            {
+                gen.Eval(() => Dsl.Allocate(opcode1).As(Dsl.ConstMember(opcode2, typeof(OpCodes))));
+            }
+            Console.WriteLine(gen.Dump());
+        }
     }
 }
