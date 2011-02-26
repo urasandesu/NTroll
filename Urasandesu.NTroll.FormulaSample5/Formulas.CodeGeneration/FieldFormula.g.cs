@@ -15,11 +15,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Member = default(IFieldDeclaration);
         }
 
+		public const string NameOfMember = "Member";
         IFieldDeclaration member;
         public new IFieldDeclaration Member 
         { 
             get { return member; } 
-            set { member = CheckCanModify(value); base.Member = value; } 
+            set { member = CheckCanModify(value); base.Member = value; OnPropertyChanged(NameOfMember); } 
         }
 
 
@@ -40,7 +41,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Member\": ");
+            sb.Append("\"");
+            sb.Append(NameOfMember);
+            sb.Append("\": ");
             AppendValueTo(Member, sb);
             sb.Append("}");
         }

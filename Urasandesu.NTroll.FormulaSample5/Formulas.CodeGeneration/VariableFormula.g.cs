@@ -15,11 +15,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             VariableName = default(string);
         }
 
+		public const string NameOfVariableName = "VariableName";
         string variableName;
         public string VariableName 
         { 
             get { return variableName; } 
-            set { variableName = CheckCanModify(value); } 
+            set { variableName = CheckCanModify(value); OnPropertyChanged(NameOfVariableName); } 
         }
 
 
@@ -40,7 +41,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"VariableName\": ");
+            sb.Append("\"");
+            sb.Append(NameOfVariableName);
+            sb.Append("\": ");
             AppendValueTo(VariableName, sb);
             sb.Append("}");
         }

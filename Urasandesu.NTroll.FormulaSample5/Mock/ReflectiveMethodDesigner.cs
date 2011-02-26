@@ -18,12 +18,24 @@ namespace Urasandesu.NTroll.FormulaSample5.Mock
 
         public void Eval(Expression<Action> exp)
         {
+            if (state.IsEnded)
+            {
+                throw new NotSupportedException("The internal DSL has already ended.");
+            }
             exp.Body.EvalTo(state);
+            if (state.IsEnded)
+            {
+                // ・state をチェックし、終了していたら以下の処理を開始する（ふつコンの流れを参考にすると良さげ）。
+                //   ・参照の解決。
+                //   ・型チェック、戻り値の確定。
+                //   ・無駄な Convert の排除（最適化）。
+                //   ・IL の生成。
+                Formula.Pin(state.CurrentBlock);
+            }
         }
 
         public string Dump()
         {
-            Formula.Pin(state.CurrentBlock);
             return state.CurrentBlock.ToString();
         }
     }

@@ -15,11 +15,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Formulas = new FormulaCollection<Formula>();
         }
 
+		public const string NameOfFormulas = "Formulas";
         FormulaCollection<Formula> formulas;
         public FormulaCollection<Formula> Formulas 
         { 
             get { return formulas; } 
-            set { formulas = CheckCanModify(value); } 
+            set { formulas = CheckCanModify(value); OnPropertyChanged(NameOfFormulas); } 
         }
 
 
@@ -41,7 +42,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Formulas\": ");
+            sb.Append("\"");
+            sb.Append(NameOfFormulas);
+            sb.Append("\": ");
             if (Formulas == null)
             {
                 sb.Append("null");

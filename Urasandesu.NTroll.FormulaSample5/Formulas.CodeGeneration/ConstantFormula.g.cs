@@ -15,11 +15,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             ConstantValue = default(object);
         }
 
+		public const string NameOfConstantValue = "ConstantValue";
         object constantValue;
         public object ConstantValue 
         { 
             get { return constantValue; } 
-            set { constantValue = CheckCanModify(value); } 
+            set { constantValue = CheckCanModify(value); OnPropertyChanged(NameOfConstantValue); } 
         }
 
 
@@ -40,7 +41,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"ConstantValue\": ");
+            sb.Append("\"");
+            sb.Append(NameOfConstantValue);
+            sb.Append("\": ");
             AppendValueTo(ConstantValue, sb);
             sb.Append("}");
         }

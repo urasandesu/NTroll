@@ -17,23 +17,26 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             IfFalse = default(Formula);
         }
 
+		public const string NameOfTest = "Test";
         Formula test;
         public Formula Test 
         { 
             get { return test; } 
-            set { test = CheckCanModify(value); } 
+            set { test = CheckCanModify(value); OnPropertyChanged(NameOfTest); } 
         }
+		public const string NameOfIfTrue = "IfTrue";
         Formula ifTrue;
         public Formula IfTrue 
         { 
             get { return ifTrue; } 
-            set { ifTrue = CheckCanModify(value); } 
+            set { ifTrue = CheckCanModify(value); OnPropertyChanged(NameOfIfTrue); } 
         }
+		public const string NameOfIfFalse = "IfFalse";
         Formula ifFalse;
         public Formula IfFalse 
         { 
             get { return ifFalse; } 
-            set { ifFalse = CheckCanModify(value); } 
+            set { ifFalse = CheckCanModify(value); OnPropertyChanged(NameOfIfFalse); } 
         }
 
 
@@ -57,7 +60,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Test\": ");
+            sb.Append("\"");
+            sb.Append(NameOfTest);
+            sb.Append("\": ");
             if (Test == null)
             {
                 sb.Append("null");
@@ -67,7 +72,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Test.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"IfTrue\": ");
+            sb.Append("\"");
+            sb.Append(NameOfIfTrue);
+            sb.Append("\": ");
             if (IfTrue == null)
             {
                 sb.Append("null");
@@ -77,7 +84,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 IfTrue.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"IfFalse\": ");
+            sb.Append("\"");
+            sb.Append(NameOfIfFalse);
+            sb.Append("\": ");
             if (IfFalse == null)
             {
                 sb.Append("null");

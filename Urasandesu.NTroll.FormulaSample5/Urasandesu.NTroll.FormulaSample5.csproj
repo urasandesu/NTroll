@@ -88,6 +88,12 @@
     <Compile Include="Formulas.CodeGeneration\Formula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\FormulaAdapter.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\FormulaInactionVisitor.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\IFormulaVisitor.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
@@ -149,7 +155,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Formulas.CodeGeneration\FormulaAdapterTemplate.tt">
+    </None>
     <None Include="Formulas.CodeGeneration\FormulaGenerator.tt">
+    </None>
+    <None Include="Formulas.CodeGeneration\FormulaInactionVisitorTemplate.tt">
     </None>
     <None Include="Formulas.CodeGeneration\Formulas.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

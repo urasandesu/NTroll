@@ -60,11 +60,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         foreach (var property in TemplateProperties)
         {
 #>
+		public const string NameOf<#= property.Name #> = "<#= property.Name #>";
         <#= property.TypeName #> <#= property.Name.ToCamel() #>;
         public <#= property.HideBySig ? "new " : "" #><#= property.TypeName #> <#= property.Name #> 
         { 
             get { return <#= property.Name.ToCamel() #>; } 
-            set { <#= property.Name.ToCamel() #> = CheckCanModify(value);<#= property.HideBySig ? " base." + property.Name + " = value;" : "" #> } 
+            set { <#= property.Name.ToCamel() #> = CheckCanModify(value);<#= property.HideBySig ? " base." + property.Name + " = value;" : "" #> OnPropertyChanged(NameOf<#= property.Name #>); } 
         }
 <#+ 
             if (property.HasToStringValueIfDefault)
@@ -169,7 +170,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     void WriteAppendingProperty(FormulaTemplateProperty property)
     {
 #>
-            sb.Append("\"<#= property.Name #>\": ");
+            sb.Append("\"");
+            sb.Append(NameOf<#= property.Name #>);
+            sb.Append("\": ");
 <#+ 
         if (-1 < property.TypeName.IndexOf("Formula"))
         {

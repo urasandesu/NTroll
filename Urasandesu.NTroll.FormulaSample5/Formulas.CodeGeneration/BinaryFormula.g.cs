@@ -17,24 +17,27 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Right = default(Formula);
         }
 
+		public const string NameOfLeft = "Left";
         Formula left;
         public Formula Left 
         { 
             get { return left; } 
-            set { left = CheckCanModify(value); } 
+            set { left = CheckCanModify(value); OnPropertyChanged(NameOfLeft); } 
         }
+		public const string NameOfMethod = "Method";
         IMethodDeclaration method;
         public IMethodDeclaration Method 
         { 
             get { return method; } 
-            set { method = CheckCanModify(value); } 
+            set { method = CheckCanModify(value); OnPropertyChanged(NameOfMethod); } 
         }
         public abstract string MethodToStringValueIfDefault { get; }
+		public const string NameOfRight = "Right";
         Formula right;
         public Formula Right 
         { 
             get { return right; } 
-            set { right = CheckCanModify(value); } 
+            set { right = CheckCanModify(value); OnPropertyChanged(NameOfRight); } 
         }
 
 
@@ -50,7 +53,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Left\": ");
+            sb.Append("\"");
+            sb.Append(NameOfLeft);
+            sb.Append("\": ");
             if (Left == null)
             {
                 sb.Append("null");
@@ -60,10 +65,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Left.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Method\": ");
+            sb.Append("\"");
+            sb.Append(NameOfMethod);
+            sb.Append("\": ");
             AppendValueTo(Method, sb, MethodToStringValueIfDefault);
             sb.Append(", ");
-            sb.Append("\"Right\": ");
+            sb.Append("\"");
+            sb.Append(NameOfRight);
+            sb.Append("\": ");
             if (Right == null)
             {
                 sb.Append("null");

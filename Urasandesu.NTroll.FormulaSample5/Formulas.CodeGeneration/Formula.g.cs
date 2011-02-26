@@ -16,23 +16,26 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             TypeDeclaration = default(ITypeDeclaration);
         }
 
+		public const string NameOfReferrer = "Referrer";
         Formula referrer;
         public Formula Referrer 
         { 
             get { return referrer; } 
-            set { referrer = CheckCanModify(value); } 
+            set { referrer = CheckCanModify(value); OnPropertyChanged(NameOfReferrer); } 
         }
+		public const string NameOfNodeType = "NodeType";
         NodeType nodeType;
         public NodeType NodeType 
         { 
             get { return nodeType; } 
-            set { nodeType = CheckCanModify(value); } 
+            set { nodeType = CheckCanModify(value); OnPropertyChanged(NameOfNodeType); } 
         }
+		public const string NameOfTypeDeclaration = "TypeDeclaration";
         ITypeDeclaration typeDeclaration;
         public ITypeDeclaration TypeDeclaration 
         { 
             get { return typeDeclaration; } 
-            set { typeDeclaration = CheckCanModify(value); } 
+            set { typeDeclaration = CheckCanModify(value); OnPropertyChanged(NameOfTypeDeclaration); } 
         }
 
 
@@ -45,10 +48,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public virtual void AppendTo(StringBuilder sb)
         {
-            sb.Append("\"NodeType\": ");
+            sb.Append("\"");
+            sb.Append(NameOfNodeType);
+            sb.Append("\": ");
             AppendValueTo(NodeType, sb);
             sb.Append(", ");
-            sb.Append("\"TypeDeclaration\": ");
+            sb.Append("\"");
+            sb.Append(NameOfTypeDeclaration);
+            sb.Append("\": ");
             AppendValueTo(TypeDeclaration, sb);
         }
     }

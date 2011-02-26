@@ -19,35 +19,40 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Result = default(Formula);
         }
 
+		public const string NameOfParentBlock = "ParentBlock";
         BlockFormula parentBlock;
         public BlockFormula ParentBlock 
         { 
             get { return parentBlock; } 
-            set { parentBlock = CheckCanModify(value); } 
+            set { parentBlock = CheckCanModify(value); OnPropertyChanged(NameOfParentBlock); } 
         }
+		public const string NameOfChildBlocks = "ChildBlocks";
         FormulaCollection<BlockFormula> childBlocks;
         public FormulaCollection<BlockFormula> ChildBlocks 
         { 
             get { return childBlocks; } 
-            set { childBlocks = CheckCanModify(value); } 
+            set { childBlocks = CheckCanModify(value); OnPropertyChanged(NameOfChildBlocks); } 
         }
+		public const string NameOfVariables = "Variables";
         FormulaCollection<Formula> variables;
         public FormulaCollection<Formula> Variables 
         { 
             get { return variables; } 
-            set { variables = CheckCanModify(value); } 
+            set { variables = CheckCanModify(value); OnPropertyChanged(NameOfVariables); } 
         }
+		public const string NameOfFormulas = "Formulas";
         FormulaCollection<Formula> formulas;
         public FormulaCollection<Formula> Formulas 
         { 
             get { return formulas; } 
-            set { formulas = CheckCanModify(value); } 
+            set { formulas = CheckCanModify(value); OnPropertyChanged(NameOfFormulas); } 
         }
+		public const string NameOfResult = "Result";
         Formula result;
         public Formula Result 
         { 
             get { return result; } 
-            set { result = CheckCanModify(value); } 
+            set { result = CheckCanModify(value); OnPropertyChanged(NameOfResult); } 
         }
 
 
@@ -73,7 +78,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"ChildBlocks\": ");
+            sb.Append("\"");
+            sb.Append(NameOfChildBlocks);
+            sb.Append("\": ");
             if (ChildBlocks == null)
             {
                 sb.Append("null");
@@ -83,7 +90,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 ChildBlocks.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Variables\": ");
+            sb.Append("\"");
+            sb.Append(NameOfVariables);
+            sb.Append("\": ");
             if (Variables == null)
             {
                 sb.Append("null");
@@ -93,7 +102,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Variables.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Formulas\": ");
+            sb.Append("\"");
+            sb.Append(NameOfFormulas);
+            sb.Append("\": ");
             if (Formulas == null)
             {
                 sb.Append("null");
@@ -103,7 +114,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Formulas.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Result\": ");
+            sb.Append("\"");
+            sb.Append(NameOfResult);
+            sb.Append("\": ");
             if (Result == null)
             {
                 sb.Append("null");

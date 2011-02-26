@@ -42,5 +42,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public Collection<ConditionalFormula> Conditions { get; private set; }
         public ExpressionToInlineValueState InlineValueState { get; private set; }
         public Dictionary<Type, Dictionary<object, FieldInfo>> ConstMembersCache { get; private set; }
+        public bool IsEnded { get; set; }
     }
 }

@@ -17,23 +17,26 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Arguments = new FormulaCollection<Formula>();
         }
 
+		public const string NameOfInstance = "Instance";
         Formula instance;
         public Formula Instance 
         { 
             get { return instance; } 
-            set { instance = CheckCanModify(value); } 
+            set { instance = CheckCanModify(value); OnPropertyChanged(NameOfInstance); } 
         }
+		public const string NameOfMethod = "Method";
         IMethodDeclaration method;
         public IMethodDeclaration Method 
         { 
             get { return method; } 
-            set { method = CheckCanModify(value); } 
+            set { method = CheckCanModify(value); OnPropertyChanged(NameOfMethod); } 
         }
+		public const string NameOfArguments = "Arguments";
         FormulaCollection<Formula> arguments;
         public FormulaCollection<Formula> Arguments 
         { 
             get { return arguments; } 
-            set { arguments = CheckCanModify(value); } 
+            set { arguments = CheckCanModify(value); OnPropertyChanged(NameOfArguments); } 
         }
 
 
@@ -56,7 +59,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Instance\": ");
+            sb.Append("\"");
+            sb.Append(NameOfInstance);
+            sb.Append("\": ");
             if (Instance == null)
             {
                 sb.Append("null");
@@ -66,10 +71,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Instance.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Method\": ");
+            sb.Append("\"");
+            sb.Append(NameOfMethod);
+            sb.Append("\": ");
             AppendValueTo(Method, sb);
             sb.Append(", ");
-            sb.Append("\"Arguments\": ");
+            sb.Append("\"");
+            sb.Append(NameOfArguments);
+            sb.Append("\": ");
             if (Arguments == null)
             {
                 sb.Append("null");

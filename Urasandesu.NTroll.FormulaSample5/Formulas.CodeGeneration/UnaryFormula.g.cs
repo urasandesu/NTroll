@@ -16,18 +16,20 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Operand = default(Formula);
         }
 
+		public const string NameOfMethod = "Method";
         IMethodDeclaration method;
         public IMethodDeclaration Method 
         { 
             get { return method; } 
-            set { method = CheckCanModify(value); } 
+            set { method = CheckCanModify(value); OnPropertyChanged(NameOfMethod); } 
         }
         public abstract string MethodToStringValueIfDefault { get; }
+		public const string NameOfOperand = "Operand";
         Formula operand;
         public Formula Operand 
         { 
             get { return operand; } 
-            set { operand = CheckCanModify(value); } 
+            set { operand = CheckCanModify(value); OnPropertyChanged(NameOfOperand); } 
         }
 
 
@@ -42,10 +44,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Method\": ");
+            sb.Append("\"");
+            sb.Append(NameOfMethod);
+            sb.Append("\": ");
             AppendValueTo(Method, sb, MethodToStringValueIfDefault);
             sb.Append(", ");
-            sb.Append("\"Operand\": ");
+            sb.Append("\"");
+            sb.Append(NameOfOperand);
+            sb.Append("\": ");
             if (Operand == null)
             {
                 sb.Append("null");

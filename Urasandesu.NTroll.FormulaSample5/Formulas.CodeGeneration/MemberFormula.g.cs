@@ -16,17 +16,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Member = default(IMemberDeclaration);
         }
 
+		public const string NameOfInstance = "Instance";
         Formula instance;
         public Formula Instance 
         { 
             get { return instance; } 
-            set { instance = CheckCanModify(value); } 
+            set { instance = CheckCanModify(value); OnPropertyChanged(NameOfInstance); } 
         }
+		public const string NameOfMember = "Member";
         IMemberDeclaration member;
         public IMemberDeclaration Member 
         { 
             get { return member; } 
-            set { member = CheckCanModify(value); } 
+            set { member = CheckCanModify(value); OnPropertyChanged(NameOfMember); } 
         }
 
 
@@ -41,7 +43,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Instance\": ");
+            sb.Append("\"");
+            sb.Append(NameOfInstance);
+            sb.Append("\": ");
             if (Instance == null)
             {
                 sb.Append("null");
@@ -51,7 +55,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Instance.AppendTo(sb);
             }
             sb.Append(", ");
-            sb.Append("\"Member\": ");
+            sb.Append("\"");
+            sb.Append(NameOfMember);
+            sb.Append("\": ");
             AppendValueTo(Member, sb);
         }
     }

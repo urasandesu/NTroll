@@ -16,17 +16,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Arguments = new FormulaCollection<Formula>();
         }
 
+		public const string NameOfConstructor = "Constructor";
         IConstructorDeclaration constructor;
         public IConstructorDeclaration Constructor 
         { 
             get { return constructor; } 
-            set { constructor = CheckCanModify(value); } 
+            set { constructor = CheckCanModify(value); OnPropertyChanged(NameOfConstructor); } 
         }
+		public const string NameOfArguments = "Arguments";
         FormulaCollection<Formula> arguments;
         public FormulaCollection<Formula> Arguments 
         { 
             get { return arguments; } 
-            set { arguments = CheckCanModify(value); } 
+            set { arguments = CheckCanModify(value); OnPropertyChanged(NameOfArguments); } 
         }
 
 
@@ -48,10 +50,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Constructor\": ");
+            sb.Append("\"");
+            sb.Append(NameOfConstructor);
+            sb.Append("\": ");
             AppendValueTo(Constructor, sb);
             sb.Append(", ");
-            sb.Append("\"Arguments\": ");
+            sb.Append("\"");
+            sb.Append(NameOfArguments);
+            sb.Append("\": ");
             if (Arguments == null)
             {
                 sb.Append("null");

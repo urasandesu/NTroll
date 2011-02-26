@@ -1,6 +1,8 @@
 ﻿<#@ import namespace="System.Collections.Generic" #>
 <#@ include file="FormulaTemplate.tt" #>
 <#@ include file="FormulaVisitorTemplate.tt" #>
+<#@ include file="FormulaAdapterTemplate.tt" #>
+<#@ include file="FormulaInactionVisitorTemplate.tt" #>
 <#+
 public class FormulaGenerator : Generator
 {
@@ -21,6 +23,14 @@ public class FormulaGenerator : Generator
         var visitorTemplate = new FormulaVisitorTemplate();
         visitorTemplate.Templates.AddRange(Templates);
         visitorTemplate.RenderToFile("IFormulaVisitor.g.cs");
+		
+		var adapterTemplate = new FormulaAdapterTemplate();
+		adapterTemplate.Templates.AddRange(Templates);
+		adapterTemplate.RenderToFile("FormulaAdapter.g.cs");
+		
+		var inactionVisitorTemplate = new FormulaInactionVisitorTemplate();
+		inactionVisitorTemplate.Templates.AddRange(Templates);
+		inactionVisitorTemplate.RenderToFile("FormulaInactionVisitor.g.cs");
     }
 }
 #>

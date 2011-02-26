@@ -1,0 +1,46 @@
+﻿<#@ import namespace="System.Collections.Generic" #>
+<#+
+public class FormulaAdapterTemplate : Template
+{
+	public FormulaAdapterTemplate()
+	{
+        Templates = new List<FormulaTemplate>();
+	}
+
+    public List<FormulaTemplate> Templates { get; private set; }
+    
+	public override string TransformText()
+	{
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Urasandesu.NTroll.FormulaSample5.Formulas
+{
+    public abstract class FormulaAdapter : IFormulaVisitor
+    {
+		IFormulaVisitor visitor;
+		public FormulaAdapter(IFormulaVisitor visitor)
+		{
+			this.visitor = visitor;
+		}
+<#+ 
+        foreach (var template in Templates)
+        {
+#>
+        public virtual Formula Visit(<#= template.TypeName #> formula)
+		{
+			return visitor.Visit(formula);
+		}
+<#+ 
+        }
+#>
+    }
+}
+<#+
+        return this.GenerationEnvironment.ToString();
+	}
+}
+#>

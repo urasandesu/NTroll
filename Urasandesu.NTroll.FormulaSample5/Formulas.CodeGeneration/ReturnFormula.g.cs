@@ -15,11 +15,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Body = default(Formula);
         }
 
+		public const string NameOfBody = "Body";
         Formula body;
         public Formula Body 
         { 
             get { return body; } 
-            set { body = CheckCanModify(value); } 
+            set { body = CheckCanModify(value); OnPropertyChanged(NameOfBody); } 
         }
 
 
@@ -41,7 +42,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Body\": ");
+            sb.Append("\"");
+            sb.Append(NameOfBody);
+            sb.Append("\": ");
             if (Body == null)
             {
                 sb.Append("null");

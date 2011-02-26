@@ -24,6 +24,10 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             return value;
         }
 
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+        }
+
         public static Formula Pin(Formula item)
         {
             var pinned = default(Formula);

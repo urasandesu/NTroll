@@ -15,5 +15,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Instance = instance;
             Member = fi.ToFieldDecl();
         }
+
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            if (propertyName == NameOfMember && Member != null)
+            {
+                TypeDeclaration = Member.FieldType;
+            }
+        }
     }
 }
