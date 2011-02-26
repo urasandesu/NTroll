@@ -11,20 +11,29 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public AssignFormula()
             : base()
         {
-			NodeType = NodeType.Assign;
+            NodeType = NodeType.Assign;
         }
+
+
 
         public override Formula Accept(IFormulaVisitor visitor)
         {
-			return visitor.Visit(this);
+            return visitor.Visit(this);
         }
-		
+
+
+        protected override Formula PinCore()
+        {
+            return base.PinCore();
+        }
+
+
         public override void AppendTo(StringBuilder sb)
-		{
-			sb.Append("{");
-			base.AppendTo(sb);
-			sb.Append("}");
-		}
+        {
+            sb.Append("{");
+            base.AppendTo(sb);
+            sb.Append("}");
+        }
     }
 }
 

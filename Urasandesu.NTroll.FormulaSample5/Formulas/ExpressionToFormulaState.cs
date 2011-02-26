@@ -15,6 +15,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             PushBlock();
             Arguments = new Collection<Formula>();
             Conditions = new Collection<ConditionalFormula>();
+            InlineValueState = new ExpressionToInlineValueState();
         }
 
         public void PushBlock()
@@ -37,5 +38,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public BlockFormula CurrentBlock { get; private set; }
         public Collection<Formula> Arguments { get; private set; }
         public Collection<ConditionalFormula> Conditions { get; private set; }
+        public ExpressionToInlineValueState InlineValueState { get; private set; }
     }
 }

@@ -7,7 +7,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class AndAlsoFormula : BinaryFormula
     {
-        public override string MethodDefaultExpandString
+        public override string MethodToStringValueIfDefault
         {
             get { return "\"&&\""; }
         }

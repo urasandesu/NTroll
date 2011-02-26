@@ -26,8 +26,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public static Formula Pin(Formula item)
         {
-            var pinned = item.PinCore();
-            pinned.IsPinned = true;
+            var pinned = default(Formula);
+            if (item != null && !item.IsPinned)
+            {
+                pinned = item.PinCore();
+                pinned.IsPinned = true;
+            }
             return pinned;
         }
 
@@ -78,11 +82,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                     sb.Append("\"");
                 }
             }
-        }
-
-        protected virtual Formula PinCore()
-        {
-            return this;
         }
 
         public override string ToString()

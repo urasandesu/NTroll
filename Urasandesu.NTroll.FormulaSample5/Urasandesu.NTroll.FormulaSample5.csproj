@@ -64,6 +64,9 @@
     <Compile Include="Formulas.CodeGeneration\BlockFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\CallFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\ConditionalFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
@@ -79,16 +82,31 @@
     <Compile Include="Formulas.CodeGeneration\ExclusiveOrFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\FieldFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\Formula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\IFormulaVisitor.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\MemberFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\MultiplyFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\NewArrayInitFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\NewFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\NotEqualFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\PropertyFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\ReturnFormula.g.cs">
@@ -106,6 +124,7 @@
     <Compile Include="Formulas\AddFormula.cs" />
     <Compile Include="Formulas\AndAlsoFormula.cs" />
     <Compile Include="Formulas\AssignFormula.cs" />
+    <Compile Include="Formulas\CallFormula.cs" />
     <Compile Include="Formulas\ConstantFormula.cs" />
     <Compile Include="Formulas\ConvertFormula.cs" />
     <Compile Include="Formulas\EqualFormula.cs" />
@@ -114,11 +133,15 @@
     <Compile Include="Formulas\ExpressionToFormulaState.cs" />
     <Compile Include="Formulas\ExpressionToInlineValue.cs" />
     <Compile Include="Formulas\ExpressionToInlineValueState.cs" />
+    <Compile Include="Formulas\FieldFormula.cs" />
     <Compile Include="Formulas\Formula.cs" />
     <Compile Include="Formulas\FormulaCollection.cs" />
     <Compile Include="Formulas\MultiplyFormula.cs" />
+    <Compile Include="Formulas\NewArrayInitFormula.cs" />
+    <Compile Include="Formulas\NewFormula.cs" />
     <Compile Include="Formulas\NodeType.cs" />
     <Compile Include="Formulas\NotEqualFormula.cs" />
+    <Compile Include="Formulas\PropertyFormula.cs" />
     <Compile Include="Formulas\ReturnFormula.cs" />
     <Compile Include="Formulas\TypeAsFormula.cs" />
     <Compile Include="Formulas\VariableFormula.cs" />

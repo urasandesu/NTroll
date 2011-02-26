@@ -4,23 +4,23 @@
 <#+
 public class FormulaGenerator : Generator
 {
-	public FormulaGenerator()
-	{
-		Templates = new List<FormulaTemplate>();
-	}
-	
-	public List<FormulaTemplate> Templates { get; private set; }
-	
-	protected override void RunCore()
-	{
-		foreach (var template in Templates)
-		{
-			template.RenderToFile(template.TypeName + ".g.cs");
-		}
-		
-		var visitorTemplate = new FormulaVisitorTemplate();
-		visitorTemplate.Templates.AddRange(Templates);
-		visitorTemplate.RenderToFile("IFormulaVisitor.g.cs");
-	}
+    public FormulaGenerator()
+    {
+        Templates = new List<FormulaTemplate>();
+    }
+    
+    public List<FormulaTemplate> Templates { get; private set; }
+    
+    protected override void RunCore()
+    {
+        foreach (var template in Templates)
+        {
+            template.RenderToFile(template.TypeName + ".g.cs");
+        }
+        
+        var visitorTemplate = new FormulaVisitorTemplate();
+        visitorTemplate.Templates.AddRange(Templates);
+        visitorTemplate.RenderToFile("IFormulaVisitor.g.cs");
+    }
 }
 #>

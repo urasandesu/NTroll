@@ -20,6 +20,11 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Initialize(new Collection<TFormula>());
         }
 
+        public FormulaCollection(params TFormula[] formulas)
+        {
+            Initialize(new Collection<TFormula>(formulas));
+        }
+
         void Initialize(IList<TFormula> list)
         {
             if (!(list is IList)) 

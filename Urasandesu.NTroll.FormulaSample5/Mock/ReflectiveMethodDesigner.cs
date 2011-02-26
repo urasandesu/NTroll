@@ -23,6 +23,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Mock
 
         public string Dump()
         {
+            Formula.Pin(state.CurrentBlock);
             return state.CurrentBlock.ToString();
         }
     }

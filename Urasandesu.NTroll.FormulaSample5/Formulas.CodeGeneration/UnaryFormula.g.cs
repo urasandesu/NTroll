@@ -11,33 +11,41 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public UnaryFormula()
             : base()
         {
-			NodeType = NodeType.None;
-			Method = default(IMethodDeclaration);
-			Operand = default(Formula);
+            NodeType = NodeType.None;
+            Method = default(IMethodDeclaration);
+            Operand = default(Formula);
         }
 
         IMethodDeclaration method;
         public IMethodDeclaration Method 
-		{ 
-			get { return method; } 
-			set { method = CheckCanModify(value); } 
-		}
-		public abstract string MethodDefaultExpandString { get; }
+        { 
+            get { return method; } 
+            set { method = CheckCanModify(value); } 
+        }
+        public abstract string MethodToStringValueIfDefault { get; }
         Formula operand;
         public Formula Operand 
-		{ 
-			get { return operand; } 
-			set { operand = CheckCanModify(value); } 
-		}
-		
+        { 
+            get { return operand; } 
+            set { operand = CheckCanModify(value); } 
+        }
+
+
+        protected override Formula PinCore()
+        {
+            Operand = Formula.Pin(Operand);
+            return base.PinCore();
+        }
+
+
         public override void AppendTo(StringBuilder sb)
-		{
-			base.AppendTo(sb);
-			sb.Append(", ");
-			sb.Append("\"Method\": ");
-			AppendValueTo(Method, sb, MethodDefaultExpandString);
-			sb.Append(", ");
-			sb.Append("\"Operand\": ");
+        {
+            base.AppendTo(sb);
+            sb.Append(", ");
+            sb.Append("\"Method\": ");
+            AppendValueTo(Method, sb, MethodToStringValueIfDefault);
+            sb.Append(", ");
+            sb.Append("\"Operand\": ");
             if (Operand == null)
             {
                 sb.Append("null");
@@ -46,7 +54,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 Operand.AppendTo(sb);
             }
-		}
+        }
     }
 }
 

@@ -15,7 +15,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             TypeDeclaration = type.ToTypeDecl();
         }
 
-        public override string MethodDefaultExpandString
+        public override string MethodToStringValueIfDefault
         {
             get { return null; }
         }

@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using Urasandesu.NAnonym.ILTools;
 using Urasandesu.NAnonym.Linq;
 using System.Reflection;
+using Urasandesu.NAnonym.Mixins.System.Reflection;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -86,11 +87,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 case ExpressionType.NegateChecked:
                     throw new NotImplementedException();
                 case ExpressionType.New:
-                    throw new NotImplementedException();
+                    EvalNew((NewExpression)exp, state);
+                    return;
                 case ExpressionType.NewArrayBounds:
                     throw new NotImplementedException();
                 case ExpressionType.NewArrayInit:
-                    throw new NotImplementedException();
+                    EvalNewArray((NewArrayExpression)exp, state);
+                    return;
                 case ExpressionType.Not:
                     throw new NotImplementedException();
                 case ExpressionType.Or:
@@ -113,6 +116,44 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                     throw new NotImplementedException();
                 case ExpressionType.UnaryPlus:
                     throw new NotImplementedException();
+            }
+        }
+
+        public static void EvalNew(NewExpression exp, ExpressionToFormulaState state)
+        {
+            EvalArguments(exp.Arguments, state);
+            var arguments = new Formula[state.Arguments.Count];
+            state.Arguments.MoveTo(arguments);
+            state.CurrentBlock.Formulas.Push(new NewFormula(exp.Constructor, arguments));
+        }
+
+        public static void EvalNewArray(NewArrayExpression exp, ExpressionToFormulaState state)
+        {
+            switch (exp.NodeType)
+            {
+                case ExpressionType.NewArrayInit:
+                    EvalNewArrayInit(exp, state);
+                    return;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public static void EvalNewArrayInit(NewArrayExpression exp, ExpressionToFormulaState state)
+        {
+            EvalArguments(exp.Expressions, state);
+            var arguments = new Formula[state.Arguments.Count];
+            state.Arguments.MoveTo(arguments);
+            state.CurrentBlock.Formulas.Push(new NewArrayInitFormula(arguments));
+        }
+
+        public static void EvalArguments(ReadOnlyCollection<Expression> exps, ExpressionToFormulaState state)
+        {
+            foreach (var exp in exps)
+            {
+                EvalExpression(exp, state);
+                var formula = state.CurrentBlock.Formulas.Pop();
+                state.Arguments.Add(formula);
             }
         }
 
@@ -285,8 +326,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 }
                 else
                 {
-                    throw new NotImplementedException();
-                    //EvalStaticMethodCall(exp, state);
+                    EvalStaticMethodCall(exp, state);
                 }
             }
             else
@@ -301,19 +341,133 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 }
                 else
                 {
-                    throw new NotImplementedException();
-                    //if (exp.Method == MethodInfoMixin.Invoke_object_objects) EvalMethodInfoInvoke_object_objects(exp, state);
-                    //else if (exp.Method == ConstructorInfoMixin.Invoke_objects) EvalConstructorInfoInvoke_objects(exp, state);
-                    //else if (exp.Method == PropertyInfoMixin.SetValue_object_object_objects) EvalPropertyInfoSetValue_object_object_objects(exp, state);
-                    //else if (exp.Method == PropertyInfoMixin.GetValue_object_objects) EvalPropertyInfoGetValue_object_objects(exp, state);
-                    //else if (exp.Method == FieldInfoMixin.SetValue_object_object) EvalFieldInfoSetValue_object_object(exp, state);
-                    //else if (exp.Method == FieldInfoMixin.GetValue_object) EvalFieldInfoGetValue_object(exp, state);
-                    //else
-                    //{
-                    //    EvalInstanceMethodCall(exp, state);
-                    //}
+                    if (exp.Method == MethodInfoMixin.Invoke_object_objects) EvalMethodInfoInvoke_object_objects(exp, state);
+                    else if (exp.Method == ConstructorInfoMixin.Invoke_objects) EvalConstructorInfoInvoke_objects(exp, state);
+                    else if (exp.Method == PropertyInfoMixin.SetValue_object_object_objects) EvalPropertyInfoSetValue_object_object_objects(exp, state);
+                    else if (exp.Method == PropertyInfoMixin.GetValue_object_objects) EvalPropertyInfoGetValue_object_objects(exp, state);
+                    else if (exp.Method == FieldInfoMixin.SetValue_object_object) EvalFieldInfoSetValue_object_object(exp, state);
+                    else if (exp.Method == FieldInfoMixin.GetValue_object) EvalFieldInfoGetValue_object(exp, state);
+                    else
+                    {
+                        throw new NotImplementedException();
+                        //EvalInstanceMethodCall(exp, state);
+                    }
                 }
             }
+        }
+
+        public static void EvalStaticMethodCall(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            EvalArguments(exp.Arguments, state);
+            var arguments = new Formula[state.Arguments.Count];
+            state.Arguments.MoveTo(arguments);
+            state.CurrentBlock.Formulas.Push(new CallFormula(null, exp.Method, arguments));
+        }
+
+        public static void EvalMethodInfoInvoke_object_objects(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var mi = (MethodInfo)state.InlineValueState.Result;
+            var instance = default(Formula);
+            if (!mi.IsStatic)
+            {
+                EvalExpression(exp.Arguments[0], state);
+                instance = state.CurrentBlock.Formulas.Pop();
+            }
+            var arguments = new Formula[] { };
+            if (exp.Arguments[1].NodeType == ExpressionType.NewArrayInit)
+            {
+                EvalArguments(((NewArrayExpression)exp.Arguments[1]).Expressions, state);
+                arguments = new Formula[state.Arguments.Count];
+                state.Arguments.MoveTo(arguments);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            state.CurrentBlock.Formulas.Push(new CallFormula(instance, mi, arguments));
+        }
+
+        public static void EvalConstructorInfoInvoke_objects(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var ci = (ConstructorInfo)state.InlineValueState.Result;
+            var arguments = new Formula[] { };
+            if (exp.Arguments[0].NodeType == ExpressionType.NewArrayInit)
+            {
+                EvalArguments(((NewArrayExpression)exp.Arguments[0]).Expressions, state);
+                arguments = new Formula[state.Arguments.Count];
+                state.Arguments.MoveTo(arguments);
+            }
+            else if (exp.Arguments[0].NodeType == ExpressionType.Constant && ((ConstantExpression)exp.Arguments[0]).Value == null)
+            {
+                // discard...
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+            state.CurrentBlock.Formulas.Push(new NewFormula(ci, arguments));
+        }
+
+        public static void EvalPropertyInfoSetValue_object_object_objects(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var pi = (PropertyInfo)state.InlineValueState.Result;
+            var setter = pi.GetSetMethod(true);
+            var instance = default(Formula);
+            if (!setter.IsStatic)
+            {
+                EvalExpression(exp.Arguments[0], state);
+                instance = state.CurrentBlock.Formulas.Pop();
+            }
+            var left = new PropertyFormula(instance, pi);
+            EvalExpression(exp.Arguments[1], state);
+            var right = state.CurrentBlock.Formulas.Pop();
+            state.CurrentBlock.Formulas.Push(new AssignFormula() { Left = left, Right = right });
+        }
+
+        public static void EvalPropertyInfoGetValue_object_objects(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var pi = (PropertyInfo)state.InlineValueState.Result;
+            var getter = pi.GetGetMethod(true);
+            var instance = default(Formula);
+            if (!getter.IsStatic)
+            {
+                EvalExpression(exp.Arguments[0], state);
+                instance = state.CurrentBlock.Formulas.Pop();
+            }
+            state.CurrentBlock.Formulas.Push(new PropertyFormula(instance, pi));
+        }
+
+        public static void EvalFieldInfoSetValue_object_object(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var fi = (FieldInfo)state.InlineValueState.Result;
+            var instance = default(Formula);
+            if (!fi.IsStatic)
+            {
+                EvalExpression(exp.Arguments[0], state);
+                instance = state.CurrentBlock.Formulas.Pop();
+            }
+            var left = new FieldFormula(instance, fi);
+            EvalExpression(exp.Arguments[1], state);
+            var right = state.CurrentBlock.Formulas.Pop();
+            state.CurrentBlock.Formulas.Push(new AssignFormula() { Left = left, Right = right });
+        }
+
+        public static void EvalFieldInfoGetValue_object(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            exp.Object.ConvertTo(state.InlineValueState);
+            var fi = (FieldInfo)state.InlineValueState.Result;
+            var instance = default(Formula);
+            if (!fi.IsStatic)
+            {
+                EvalExpression(exp.Arguments[0], state);
+                instance = state.CurrentBlock.Formulas.Pop();
+            }
+            state.CurrentBlock.Formulas.Push(new FieldFormula(instance, fi));
         }
 
         public static void EvalIf(MethodCallExpression exp, ExpressionToFormulaState state)

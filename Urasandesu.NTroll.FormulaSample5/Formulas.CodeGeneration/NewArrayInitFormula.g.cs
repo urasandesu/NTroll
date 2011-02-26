@@ -6,20 +6,20 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class ReturnFormula : Formula
+    public partial class NewArrayInitFormula : Formula
     {
-        public ReturnFormula()
+        public NewArrayInitFormula()
             : base()
         {
-            NodeType = NodeType.Return;
-            Body = default(Formula);
+            NodeType = NodeType.NewArrayInit;
+            Formulas = new FormulaCollection<Formula>();
         }
 
-        Formula body;
-        public Formula Body 
+        FormulaCollection<Formula> formulas;
+        public FormulaCollection<Formula> Formulas 
         { 
-            get { return body; } 
-            set { body = CheckCanModify(value); } 
+            get { return formulas; } 
+            set { formulas = CheckCanModify(value); } 
         }
 
 
@@ -31,7 +31,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         protected override Formula PinCore()
         {
-            Body = Formula.Pin(Body);
+            Formulas = (FormulaCollection<Formula>)Formula.Pin(Formulas);
             return base.PinCore();
         }
 
@@ -41,14 +41,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
-            sb.Append("\"Body\": ");
-            if (Body == null)
+            sb.Append("\"Formulas\": ");
+            if (Formulas == null)
             {
                 sb.Append("null");
             }
             else
             {
-                Body.AppendTo(sb);
+                Formulas.AppendTo(sb);
             }
             sb.Append("}");
         }

@@ -11,41 +11,53 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public ConditionalFormula()
             : base()
         {
-			NodeType = NodeType.Conditional;
-			Test = default(Formula);
-			IfTrue = default(Formula);
-			IfFalse = default(Formula);
+            NodeType = NodeType.Conditional;
+            Test = default(Formula);
+            IfTrue = default(Formula);
+            IfFalse = default(Formula);
         }
 
         Formula test;
         public Formula Test 
-		{ 
-			get { return test; } 
-			set { test = CheckCanModify(value); } 
-		}
+        { 
+            get { return test; } 
+            set { test = CheckCanModify(value); } 
+        }
         Formula ifTrue;
         public Formula IfTrue 
-		{ 
-			get { return ifTrue; } 
-			set { ifTrue = CheckCanModify(value); } 
-		}
+        { 
+            get { return ifTrue; } 
+            set { ifTrue = CheckCanModify(value); } 
+        }
         Formula ifFalse;
         public Formula IfFalse 
-		{ 
-			get { return ifFalse; } 
-			set { ifFalse = CheckCanModify(value); } 
-		}
+        { 
+            get { return ifFalse; } 
+            set { ifFalse = CheckCanModify(value); } 
+        }
+
+
         public override Formula Accept(IFormulaVisitor visitor)
         {
-			return visitor.Visit(this);
+            return visitor.Visit(this);
         }
-		
+
+
+        protected override Formula PinCore()
+        {
+            Test = Formula.Pin(Test);
+            IfTrue = Formula.Pin(IfTrue);
+            IfFalse = Formula.Pin(IfFalse);
+            return base.PinCore();
+        }
+
+
         public override void AppendTo(StringBuilder sb)
-		{
-			sb.Append("{");
-			base.AppendTo(sb);
-			sb.Append(", ");
-			sb.Append("\"Test\": ");
+        {
+            sb.Append("{");
+            base.AppendTo(sb);
+            sb.Append(", ");
+            sb.Append("\"Test\": ");
             if (Test == null)
             {
                 sb.Append("null");
@@ -54,8 +66,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 Test.AppendTo(sb);
             }
-			sb.Append(", ");
-			sb.Append("\"IfTrue\": ");
+            sb.Append(", ");
+            sb.Append("\"IfTrue\": ");
             if (IfTrue == null)
             {
                 sb.Append("null");
@@ -64,8 +76,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 IfTrue.AppendTo(sb);
             }
-			sb.Append(", ");
-			sb.Append("\"IfFalse\": ");
+            sb.Append(", ");
+            sb.Append("\"IfFalse\": ");
             if (IfFalse == null)
             {
                 sb.Append("null");
@@ -74,8 +86,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 IfFalse.AppendTo(sb);
             }
-			sb.Append("}");
-		}
+            sb.Append("}");
+        }
     }
 }
 

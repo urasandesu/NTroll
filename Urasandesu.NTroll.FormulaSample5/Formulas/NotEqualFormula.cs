@@ -7,7 +7,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class NotEqualFormula : BinaryFormula
     {
-        public override string MethodDefaultExpandString
+        public override string MethodToStringValueIfDefault
         {
             get { return "\"!=\""; }
         }

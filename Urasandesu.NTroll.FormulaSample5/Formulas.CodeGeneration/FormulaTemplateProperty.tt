@@ -1,10 +1,11 @@
 ﻿<#+
 public class FormulaTemplateProperty
 {
-	public string Name { get; set; }
-	public string TypeName { get; set; }
-	public string Default { get; set; }
-	public bool ProhibitsExpandString { get; set; }
-	public bool HasDefaultExpandString { get; set; }
+    public string Name { get; set; }
+    public string TypeName { get; set; }
+    public string Default { get; set; }
+    public bool ProhibitsToString { get; set; }
+    public bool HasToStringValueIfDefault { get; set; }
+    public bool HideBySig { get; set; }
 }
 #>

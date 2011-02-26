@@ -11,30 +11,39 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public ConstantFormula()
             : base()
         {
-			NodeType = NodeType.Constant;
-			ConstantValue = default(object);
+            NodeType = NodeType.Constant;
+            ConstantValue = default(object);
         }
 
         object constantValue;
         public object ConstantValue 
-		{ 
-			get { return constantValue; } 
-			set { constantValue = CheckCanModify(value); } 
-		}
+        { 
+            get { return constantValue; } 
+            set { constantValue = CheckCanModify(value); } 
+        }
+
+
         public override Formula Accept(IFormulaVisitor visitor)
         {
-			return visitor.Visit(this);
+            return visitor.Visit(this);
         }
-		
+
+
+        protected override Formula PinCore()
+        {
+            return base.PinCore();
+        }
+
+
         public override void AppendTo(StringBuilder sb)
-		{
-			sb.Append("{");
-			base.AppendTo(sb);
-			sb.Append(", ");
-			sb.Append("\"ConstantValue\": ");
-			AppendValueTo(ConstantValue, sb);
-			sb.Append("}");
-		}
+        {
+            sb.Append("{");
+            base.AppendTo(sb);
+            sb.Append(", ");
+            sb.Append("\"ConstantValue\": ");
+            AppendValueTo(ConstantValue, sb);
+            sb.Append("}");
+        }
     }
 }
 

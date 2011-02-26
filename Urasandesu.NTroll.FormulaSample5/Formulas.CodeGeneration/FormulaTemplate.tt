@@ -10,20 +10,20 @@
 
 public class FormulaTemplate : Template
 {
-	public FormulaTemplate()
-		: base()
-	{
-		TemplateProperties = new List<FormulaTemplateProperty>();
-	}
-	
-	public string BaseTypeName { get; set; }
-	public string TypeName { get; set; }
-	public bool IsAbstract { get; set; }
-	public NodeType NodeType { get; set; }
-	public List<FormulaTemplateProperty> TemplateProperties { get; set; }
-	
-	public override string TransformText()
-	{
+    public FormulaTemplate()
+        : base()
+    {
+        TemplateProperties = new List<FormulaTemplateProperty>();
+    }
+    
+    public string BaseTypeName { get; set; }
+    public string TypeName { get; set; }
+    public bool IsAbstract { get; set; }
+    public NodeType NodeType { get; set; }
+    public List<FormulaTemplateProperty> TemplateProperties { get; set; }
+    
+    public override string TransformText()
+    {
 #>
 using System;
 using System.Collections.Generic;
@@ -39,110 +39,140 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             : base()
         {
 <#+ 
-		if (BaseTypeName != null)
-		{
+        if (BaseTypeName != null)
+        {
 #>
-			NodeType = NodeType.<#= NodeType.ToString() #>;
+            NodeType = NodeType.<#= NodeType.ToString() #>;
 <#+ 
-		}
+        }
 #>
 <#+ 
-			foreach (var property in TemplateProperties)
-			{
+            foreach (var property in TemplateProperties)
+            {
 #>
-			<#= property.Name #> = <#= property.Default #>;
+            <#= property.Name #> = <#= property.Default #>;
 <#+ 
-			}
+            }
 #>
         }
 
 <#+ 
-		foreach (var property in TemplateProperties)
-		{
+        foreach (var property in TemplateProperties)
+        {
 #>
         <#= property.TypeName #> <#= property.Name.ToCamel() #>;
-        public <#= property.TypeName #> <#= property.Name #> 
-		{ 
-			get { return <#= property.Name.ToCamel() #>; } 
-			set { <#= property.Name.ToCamel() #> = CheckCanModify(value); } 
-		}
-<#+ 
-			if (property.HasDefaultExpandString)
-			{
-#>
-		public abstract string <#= property.Name #>DefaultExpandString { get; }
-<#+ 
-			}
-#>
-<#+ 
-		}
-		
-		if (!IsAbstract)
-		{
-#>
-        public override Formula Accept(IFormulaVisitor visitor)
-        {
-			return visitor.Visit(this);
+        public <#= property.HideBySig ? "new " : "" #><#= property.TypeName #> <#= property.Name #> 
+        { 
+            get { return <#= property.Name.ToCamel() #>; } 
+            set { <#= property.Name.ToCamel() #> = CheckCanModify(value);<#= property.HideBySig ? " base." + property.Name + " = value;" : "" #> } 
         }
 <#+ 
-		}
+            if (property.HasToStringValueIfDefault)
+            {
 #>
-		
+        public abstract string <#= property.Name #>ToStringValueIfDefault { get; }
+<#+ 
+            }
+#>
+<#+ 
+        }
+        
+        if (!IsAbstract)
+        {
+#>
+
+
+        public override Formula Accept(IFormulaVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
+<#+ 
+        }
+#>
+
+
+        protected <#= BaseTypeName == null ? "virtual" : "override" #> Formula PinCore()
+        {
+<#+ 
+            foreach (var property in TemplateProperties.Where(_ => -1 < _.TypeName.IndexOf("Formula")))
+            {
+#>
+            <#= property.Name #> = <#= property.TypeName == "Formula" ? "" : "(" + property.TypeName + ")" #>Formula.Pin(<#= property.Name #>);
+<#+ 
+            }
+#>
+<#+ 
+            if (BaseTypeName == null)
+            {
+#>
+            return this;
+<#+  
+            }
+            else
+            {
+#>
+            return base.PinCore();
+<#+ 
+            }
+#>
+        }
+
+
         public <#= BaseTypeName == null ? "virtual" : "override" #> void AppendTo(StringBuilder sb)
-		{
+        {
 <#+  
-		if (!IsAbstract)
-		{
+        if (!IsAbstract)
+        {
 #>
-			sb.Append("{");
+            sb.Append("{");
 <#+ 
-		}
-#>
-<#+ 
-		if (BaseTypeName != null)
-		{
-#>
-			base.AppendTo(sb);
-<#+ 
-		}
+        }
 #>
 <#+ 
-		TemplateProperties.Where(_ => !_.ProhibitsExpandString).ForEach(
-		(property, propertyIndex) =>
-		{
-			if (BaseTypeName != null || 0 < propertyIndex)
-			{
+        if (BaseTypeName != null)
+        {
 #>
-			sb.Append(", ");
+            base.AppendTo(sb);
+<#+ 
+        }
+#>
+<#+ 
+        TemplateProperties.Where(_ => !_.ProhibitsToString).ForEach(
+        (property, propertyIndex) =>
+        {
+            if (BaseTypeName != null || 0 < propertyIndex)
+            {
+#>
+            sb.Append(", ");
 <#+
-			}			
-			WriteAppendingProperty(property);
-		});
+            }            
+            WriteAppendingProperty(property);
+        });
 #>
 <#+  
-		if (!IsAbstract)
-		{
+        if (!IsAbstract)
+        {
 #>
-			sb.Append("}");
+            sb.Append("}");
 <#+ 
-		}
+        }
 #>
-		}
+        }
     }
 }
 
 <#+
-		
+        
         return this.GenerationEnvironment.ToString();
-	}
-	
-	void WriteAppendingProperty(FormulaTemplateProperty property)
-	{
+    }
+    
+    void WriteAppendingProperty(FormulaTemplateProperty property)
+    {
 #>
-			sb.Append("\"<#= property.Name #>\": ");
+            sb.Append("\"<#= property.Name #>\": ");
 <#+ 
-		if (-1 < property.TypeName.IndexOf("Formula"))
-		{
+        if (-1 < property.TypeName.IndexOf("Formula"))
+        {
 #>
             if (<#= property.Name #> == null)
             {
@@ -153,28 +183,28 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 <#= property.Name #>.AppendTo(sb);
             }
 <#+  
-		}
-		else
-		{
+        }
+        else
+        {
 #>
 <#+ 
-			if (!property.HasDefaultExpandString)
-			{
+            if (!property.HasToStringValueIfDefault)
+            {
 #>
-			AppendValueTo(<#= property.Name #>, sb);
+            AppendValueTo(<#= property.Name #>, sb);
 <#+ 
-			}
-			else
-			{
+            }
+            else
+            {
 #>
-			AppendValueTo(<#= property.Name #>, sb, <#= property.Name #>DefaultExpandString);
+            AppendValueTo(<#= property.Name #>, sb, <#= property.Name #>ToStringValueIfDefault);
 <#+ 
-			}
-#>
-<#+ 
-		}
+            }
 #>
 <#+ 
-	}
+        }
+#>
+<#+ 
+    }
 }
 #>

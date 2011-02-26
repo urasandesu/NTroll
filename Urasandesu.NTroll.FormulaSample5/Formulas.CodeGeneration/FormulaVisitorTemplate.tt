@@ -2,15 +2,15 @@
 <#+
 public class FormulaVisitorTemplate : Template
 {
-	public FormulaVisitorTemplate()
-	{
-		Templates = new List<FormulaTemplate>();
-	}
+    public FormulaVisitorTemplate()
+    {
+        Templates = new List<FormulaTemplate>();
+    }
 
-	public List<FormulaTemplate> Templates { get; private set; }
-	
-	public override string TransformText()
-	{
+    public List<FormulaTemplate> Templates { get; private set; }
+    
+    public override string TransformText()
+    {
 #>
 using System;
 using System.Collections.Generic;
@@ -22,17 +22,17 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public interface IFormulaVisitor
     {
 <#+ 
-		foreach (var template in Templates)
-		{
+        foreach (var template in Templates)
+        {
 #>
         Formula Visit(<#= template.TypeName #> formula);
 <#+ 
-		}
+        }
 #>
     }
 }
 <#+ 
         return this.GenerationEnvironment.ToString();
-	}
+    }
 }
 #>

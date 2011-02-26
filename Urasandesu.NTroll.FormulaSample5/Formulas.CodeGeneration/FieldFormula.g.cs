@@ -6,14 +6,21 @@ using Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class ConvertFormula : UnaryFormula
+    public partial class FieldFormula : MemberFormula
     {
-        public ConvertFormula()
+        public FieldFormula()
             : base()
         {
-            NodeType = NodeType.Convert;
+            NodeType = NodeType.Field;
+            Member = default(IFieldDeclaration);
         }
 
+        IFieldDeclaration member;
+        public new IFieldDeclaration Member 
+        { 
+            get { return member; } 
+            set { member = CheckCanModify(value); base.Member = value; } 
+        }
 
 
         public override Formula Accept(IFormulaVisitor visitor)
@@ -32,6 +39,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             sb.Append("{");
             base.AppendTo(sb);
+            sb.Append(", ");
+            sb.Append("\"Member\": ");
+            AppendValueTo(Member, sb);
             sb.Append("}");
         }
     }

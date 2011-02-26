@@ -12,7 +12,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public static class ExpressionToInlineValue
     {
-        public static void Convert(this Expression exp, ExpressionToInlineValueState state)
+        public static void ConvertTo(this Expression exp, ExpressionToInlineValueState state)
         {
             ConvertExpression(exp, state);
         }
