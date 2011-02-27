@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -14,21 +15,28 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             NodeType = NodeType.None;
             Instance = default(Formula);
             Member = default(IMemberDeclaration);
+            Initialize();
         }
 
-		public const string NameOfInstance = "Instance";
+        public const string NameOfInstance = "Instance";
         Formula instance;
         public Formula Instance 
         { 
             get { return instance; } 
-            set { instance = CheckCanModify(value); OnPropertyChanged(NameOfInstance); } 
+            set 
+            {
+                SetFormula(NameOfInstance, value, ref instance);
+            }
         }
-		public const string NameOfMember = "Member";
+        public const string NameOfMember = "Member";
         IMemberDeclaration member;
         public IMemberDeclaration Member 
         { 
             get { return member; } 
-            set { member = CheckCanModify(value); OnPropertyChanged(NameOfMember); } 
+            set 
+            {
+                SetValue(NameOfMember, value, ref member);
+            }
         }
 
 

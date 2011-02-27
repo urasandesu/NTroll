@@ -30,16 +30,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> <#= BaseTypeName == null ? "" : ": " + BaseTypeName #>
+    public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> : <#= BaseTypeName #>
     {
         public <#= TypeName #>()
             : base()
         {
 <#+ 
-        if (BaseTypeName != null)
+        if (BaseTypeName != "INotifyPropertyChanged")
         {
 #>
             NodeType = NodeType.<#= NodeType.ToString() #>;
@@ -54,18 +55,61 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 <#+ 
             }
 #>
+            Initialize();
         }
 
 <#+ 
         foreach (var property in TemplateProperties)
         {
 #>
-		public const string NameOf<#= property.Name #> = "<#= property.Name #>";
+        public const string NameOf<#= property.Name #> = "<#= property.Name #>";
         <#= property.TypeName #> <#= property.Name.ToCamel() #>;
         public <#= property.HideBySig ? "new " : "" #><#= property.TypeName #> <#= property.Name #> 
         { 
             get { return <#= property.Name.ToCamel() #>; } 
-            set { <#= property.Name.ToCamel() #> = CheckCanModify(value);<#= property.HideBySig ? " base." + property.Name + " = value;" : "" #> OnPropertyChanged(NameOf<#= property.Name #>); } 
+            set 
+            {
+<#+ 
+            if (-1 < property.TypeName.IndexOf("Formula"))
+            {
+                if (property.ProhibitsNotification)
+                {
+#>
+                SetFormulaWithoutNotification(NameOf<#= property.Name #>, value, ref <#= property.Name.ToCamel() #>);
+<#+ 
+                }
+                else
+                {
+#>
+                SetFormula(NameOf<#= property.Name #>, value, ref <#= property.Name.ToCamel() #>);
+<#+ 
+                }
+            }
+            else
+            {
+                if (property.ProhibitsNotification)
+                {
+#>
+                SetValueWithoutNotification(NameOf<#= property.Name #>, value, ref <#= property.Name.ToCamel() #>);
+<#+ 
+                }
+                else
+                {
+#>
+                SetValue(NameOf<#= property.Name #>, value, ref <#= property.Name.ToCamel() #>);
+<#+ 
+                }
+            }
+#>
+<#+ 
+            if (property.HideBySig)
+            {
+#>
+                base.<#= property.Name #> = value;
+<#+ 
+            }
+#>
+            }
         }
 <#+ 
             if (property.HasToStringValueIfDefault)
@@ -92,7 +136,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 #>
 
 
-        protected <#= BaseTypeName == null ? "virtual" : "override" #> Formula PinCore()
+        protected <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> Formula PinCore()
         {
 <#+ 
             foreach (var property in TemplateProperties.Where(_ => -1 < _.TypeName.IndexOf("Formula")))
@@ -103,7 +147,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
 #>
 <#+ 
-            if (BaseTypeName == null)
+            if (BaseTypeName == "INotifyPropertyChanged")
             {
 #>
             return this;
@@ -119,7 +163,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        public <#= BaseTypeName == null ? "virtual" : "override" #> void AppendTo(StringBuilder sb)
+        public <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> void AppendTo(StringBuilder sb)
         {
 <#+  
         if (!IsAbstract)
@@ -130,7 +174,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 #>
 <#+ 
-        if (BaseTypeName != null)
+        if (BaseTypeName != "INotifyPropertyChanged")
         {
 #>
             base.AppendTo(sb);
@@ -141,7 +185,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         TemplateProperties.Where(_ => !_.ProhibitsToString).ForEach(
         (property, propertyIndex) =>
         {
-            if (BaseTypeName != null || 0 < propertyIndex)
+            if (BaseTypeName != "INotifyPropertyChanged" || 0 < propertyIndex)
             {
 #>
             sb.Append(", ");

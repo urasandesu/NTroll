@@ -7,5 +7,6 @@ public class FormulaTemplateProperty
     public bool ProhibitsToString { get; set; }
     public bool HasToStringValueIfDefault { get; set; }
     public bool HideBySig { get; set; }
+    public bool ProhibitsNotification { get; set; }
 }
 #>

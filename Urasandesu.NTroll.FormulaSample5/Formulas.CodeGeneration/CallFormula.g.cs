@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -15,28 +16,38 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Instance = default(Formula);
             Method = default(IMethodDeclaration);
             Arguments = new FormulaCollection<Formula>();
+            Initialize();
         }
 
-		public const string NameOfInstance = "Instance";
+        public const string NameOfInstance = "Instance";
         Formula instance;
         public Formula Instance 
         { 
             get { return instance; } 
-            set { instance = CheckCanModify(value); OnPropertyChanged(NameOfInstance); } 
+            set 
+            {
+                SetFormula(NameOfInstance, value, ref instance);
+            }
         }
-		public const string NameOfMethod = "Method";
+        public const string NameOfMethod = "Method";
         IMethodDeclaration method;
         public IMethodDeclaration Method 
         { 
             get { return method; } 
-            set { method = CheckCanModify(value); OnPropertyChanged(NameOfMethod); } 
+            set 
+            {
+                SetValue(NameOfMethod, value, ref method);
+            }
         }
-		public const string NameOfArguments = "Arguments";
+        public const string NameOfArguments = "Arguments";
         FormulaCollection<Formula> arguments;
         public FormulaCollection<Formula> Arguments 
         { 
             get { return arguments; } 
-            set { arguments = CheckCanModify(value); OnPropertyChanged(NameOfArguments); } 
+            set 
+            {
+                SetFormula(NameOfArguments, value, ref arguments);
+            }
         }
 
 

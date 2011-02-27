@@ -47,6 +47,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\NAnonym\Bin\Debug\Urasandesu.NAnonym.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Formulas.CodeGeneration\AddFormula.g.cs">
@@ -130,7 +133,10 @@
     <Compile Include="Formulas\AddFormula.cs" />
     <Compile Include="Formulas\AndAlsoFormula.cs" />
     <Compile Include="Formulas\AssignFormula.cs" />
+    <Compile Include="Formulas\BinaryFormula.cs" />
+    <Compile Include="Formulas\BlockFormula.cs" />
     <Compile Include="Formulas\CallFormula.cs" />
+    <Compile Include="Formulas\ConditionalFormula.cs" />
     <Compile Include="Formulas\ConstantFormula.cs" />
     <Compile Include="Formulas\ConvertFormula.cs" />
     <Compile Include="Formulas\EqualFormula.cs" />

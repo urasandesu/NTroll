@@ -2,15 +2,15 @@
 <#+
 public class FormulaInactionVisitorTemplate : Template
 {
-	public FormulaInactionVisitorTemplate()
-	{
+    public FormulaInactionVisitorTemplate()
+    {
         Templates = new List<FormulaTemplate>();
-	}
+    }
 
     public List<FormulaTemplate> Templates { get; private set; }
     
-	public override string TransformText()
-	{
+    public override string TransformText()
+    {
 #>
 using System;
 using System.Collections.Generic;
@@ -26,9 +26,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
 #>
         public Formula Visit(<#= template.TypeName #> formula)
-		{
-			return formula;
-		}
+        {
+            return formula;
+        }
 <#+ 
         }
 #>
@@ -36,6 +36,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 }
 <#+
         return this.GenerationEnvironment.ToString();
-	}
+    }
 }
 #>

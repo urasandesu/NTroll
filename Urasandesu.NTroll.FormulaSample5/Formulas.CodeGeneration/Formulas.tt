@@ -71,7 +71,7 @@
     ft.BaseTypeName = "Formula";
     ft.TypeName = "BlockFormula";
     ft.NodeType = NodeType.Block;
-    ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "ParentBlock", TypeName = "BlockFormula", Default = "default(BlockFormula)", ProhibitsToString = true });
+    ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "ParentBlock", TypeName = "BlockFormula", Default = "default(BlockFormula)", ProhibitsToString = true, ProhibitsNotification = true });
     ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "ChildBlocks", TypeName = "FormulaCollection<BlockFormula>", Default = "new FormulaCollection<BlockFormula>()" });
     ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "Variables", TypeName = "FormulaCollection<Formula>", Default = "new FormulaCollection<Formula>()" });
     ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "Formulas", TypeName = "FormulaCollection<Formula>", Default = "new FormulaCollection<Formula>()" });
@@ -88,6 +88,7 @@
 
     // Formula
     ft = new FormulaTemplate();
+    ft.BaseTypeName = "INotifyPropertyChanged";
     ft.TypeName = "Formula";
     ft.IsAbstract = true;
     ft.TemplateProperties.Add(new FormulaTemplateProperty() { Name = "Referrer", TypeName = "Formula", Default = "default(Formula)", ProhibitsToString = true });

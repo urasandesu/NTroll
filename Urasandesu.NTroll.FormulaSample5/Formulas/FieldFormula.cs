@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using Urasandesu.NAnonym.Mixins.System.Reflection;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -16,11 +17,17 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Member = fi.ToFieldDecl();
         }
 
-        protected override void OnPropertyChanged(string propertyName)
+        protected override void Initialize()
         {
-            if (propertyName == NameOfMember && Member != null)
+            base.Initialize();
+            PropertyChanged += new PropertyChangedEventHandler(FieldFormula_PropertyChanged);
+        }
+
+        void FieldFormula_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == NameOfMember)
             {
-                TypeDeclaration = Member.FieldType;
+                TypeDeclaration = Member == null ? null : Member.FieldType;
             }
         }
     }

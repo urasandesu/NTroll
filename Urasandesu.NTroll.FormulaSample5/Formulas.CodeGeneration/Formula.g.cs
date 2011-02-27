@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class Formula 
+    public abstract partial class Formula : INotifyPropertyChanged
     {
         public Formula()
             : base()
@@ -14,28 +15,38 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Referrer = default(Formula);
             NodeType = NodeType.None;
             TypeDeclaration = default(ITypeDeclaration);
+            Initialize();
         }
 
-		public const string NameOfReferrer = "Referrer";
+        public const string NameOfReferrer = "Referrer";
         Formula referrer;
         public Formula Referrer 
         { 
             get { return referrer; } 
-            set { referrer = CheckCanModify(value); OnPropertyChanged(NameOfReferrer); } 
+            set 
+            {
+                SetFormula(NameOfReferrer, value, ref referrer);
+            }
         }
-		public const string NameOfNodeType = "NodeType";
+        public const string NameOfNodeType = "NodeType";
         NodeType nodeType;
         public NodeType NodeType 
         { 
             get { return nodeType; } 
-            set { nodeType = CheckCanModify(value); OnPropertyChanged(NameOfNodeType); } 
+            set 
+            {
+                SetValue(NameOfNodeType, value, ref nodeType);
+            }
         }
-		public const string NameOfTypeDeclaration = "TypeDeclaration";
+        public const string NameOfTypeDeclaration = "TypeDeclaration";
         ITypeDeclaration typeDeclaration;
         public ITypeDeclaration TypeDeclaration 
         { 
             get { return typeDeclaration; } 
-            set { typeDeclaration = CheckCanModify(value); OnPropertyChanged(NameOfTypeDeclaration); } 
+            set 
+            {
+                SetValue(NameOfTypeDeclaration, value, ref typeDeclaration);
+            }
         }
 
 

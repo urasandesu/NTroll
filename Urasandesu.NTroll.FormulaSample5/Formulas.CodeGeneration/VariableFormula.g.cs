@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -13,14 +14,18 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             NodeType = NodeType.Variable;
             VariableName = default(string);
+            Initialize();
         }
 
-		public const string NameOfVariableName = "VariableName";
+        public const string NameOfVariableName = "VariableName";
         string variableName;
         public string VariableName 
         { 
             get { return variableName; } 
-            set { variableName = CheckCanModify(value); OnPropertyChanged(NameOfVariableName); } 
+            set 
+            {
+                SetValue(NameOfVariableName, value, ref variableName);
+            }
         }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -13,14 +14,18 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             NodeType = NodeType.Constant;
             ConstantValue = default(object);
+            Initialize();
         }
 
-		public const string NameOfConstantValue = "ConstantValue";
+        public const string NameOfConstantValue = "ConstantValue";
         object constantValue;
         public object ConstantValue 
         { 
             get { return constantValue; } 
-            set { constantValue = CheckCanModify(value); OnPropertyChanged(NameOfConstantValue); } 
+            set 
+            {
+                SetValue(NameOfConstantValue, value, ref constantValue);
+            }
         }
 
 

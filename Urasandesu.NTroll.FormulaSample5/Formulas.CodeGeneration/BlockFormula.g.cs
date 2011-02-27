@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -17,42 +18,58 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Variables = new FormulaCollection<Formula>();
             Formulas = new FormulaCollection<Formula>();
             Result = default(Formula);
+            Initialize();
         }
 
-		public const string NameOfParentBlock = "ParentBlock";
+        public const string NameOfParentBlock = "ParentBlock";
         BlockFormula parentBlock;
         public BlockFormula ParentBlock 
         { 
             get { return parentBlock; } 
-            set { parentBlock = CheckCanModify(value); OnPropertyChanged(NameOfParentBlock); } 
+            set 
+            {
+                SetFormulaWithoutNotification(NameOfParentBlock, value, ref parentBlock);
+            }
         }
-		public const string NameOfChildBlocks = "ChildBlocks";
+        public const string NameOfChildBlocks = "ChildBlocks";
         FormulaCollection<BlockFormula> childBlocks;
         public FormulaCollection<BlockFormula> ChildBlocks 
         { 
             get { return childBlocks; } 
-            set { childBlocks = CheckCanModify(value); OnPropertyChanged(NameOfChildBlocks); } 
+            set 
+            {
+                SetFormula(NameOfChildBlocks, value, ref childBlocks);
+            }
         }
-		public const string NameOfVariables = "Variables";
+        public const string NameOfVariables = "Variables";
         FormulaCollection<Formula> variables;
         public FormulaCollection<Formula> Variables 
         { 
             get { return variables; } 
-            set { variables = CheckCanModify(value); OnPropertyChanged(NameOfVariables); } 
+            set 
+            {
+                SetFormula(NameOfVariables, value, ref variables);
+            }
         }
-		public const string NameOfFormulas = "Formulas";
+        public const string NameOfFormulas = "Formulas";
         FormulaCollection<Formula> formulas;
         public FormulaCollection<Formula> Formulas 
         { 
             get { return formulas; } 
-            set { formulas = CheckCanModify(value); OnPropertyChanged(NameOfFormulas); } 
+            set 
+            {
+                SetFormula(NameOfFormulas, value, ref formulas);
+            }
         }
-		public const string NameOfResult = "Result";
+        public const string NameOfResult = "Result";
         Formula result;
         public Formula Result 
         { 
             get { return result; } 
-            set { result = CheckCanModify(value); OnPropertyChanged(NameOfResult); } 
+            set 
+            {
+                SetFormula(NameOfResult, value, ref result);
+            }
         }
 
 

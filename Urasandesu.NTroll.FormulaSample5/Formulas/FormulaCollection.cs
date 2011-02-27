@@ -5,15 +5,14 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections;
 using Urasandesu.NAnonym;
+using System.Collections.Specialized;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public class FormulaCollection<TFormula> :
-        Formula, IList<TFormula>, ICollection<TFormula>, IEnumerable<TFormula>, 
-        IList, ICollection, IEnumerable where TFormula : Formula
+        Formula, IList<TFormula>, ICollection<TFormula>, IEnumerable<TFormula>, INotifyCollectionChanged where TFormula : Formula
     {
         IList<TFormula> list;
-        IList _list;
 
         public FormulaCollection()
         {
@@ -27,14 +26,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         void Initialize(IList<TFormula> list)
         {
-            if (!(list is IList)) 
-                throw new ArgumentException("The parameter must implement System.Collections.IList.", TypeSavable.GetName(() => list));
-            
             this.list = list;
-            _list = (IList)list;
         }
-
-        #region IList<TFormula>, ICollection<TFormula>, IEnumerable<TFormula>, IList, ICollection, IEnumerable
 
         public int IndexOf(TFormula item)
         {
@@ -43,14 +36,23 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public void Insert(int index, TFormula item)
         {
-            item.Referrer = Referrer;
             list.Insert(index, item);
+            SetReferrerWithoutNotification(item, this);
+            Subscribe(item);
+            OnCountPropertyChanged();
+            OnItemPropertyChanged();
+            OnCollectionAdded(item, index);
         }
 
         public void RemoveAt(int index)
         {
-            list[index].Referrer = null;
+            var removingItem = list[index];
             list.RemoveAt(index);
+            SetReferrerWithoutNotification(removingItem, null);
+            Unsubscribe(removingItem);
+            OnCountPropertyChanged();
+            OnItemPropertyChanged();
+            OnCollectionRemoved(removingItem, index);
         }
 
         public TFormula this[int index]
@@ -61,24 +63,33 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             set
             {
-                list[index].Referrer = Referrer;
+                var replacingItem = list[index];
                 list[index] = value;
+                SetReferrerWithoutNotification(replacingItem, null);
+                Unsubscribe(replacingItem);
+                SetReferrerWithoutNotification(value, Referrer);
+                Subscribe(value);
+                OnItemPropertyChanged();
+                OnCollectionReplaced(value, replacingItem, index);
             }
         }
 
         public void Add(TFormula item)
         {
-            item.Referrer = Referrer;
-            list.Add(item);
+            Insert(Count, item);
         }
 
         public void Clear()
         {
-            foreach (var item in list)
+            foreach (var removingItem in list)
             {
-                item.Referrer = null;
+                SetReferrerWithoutNotification(removingItem, null);
+                Unsubscribe(removingItem);
             }
             list.Clear();
+            OnCountPropertyChanged();
+            OnItemPropertyChanged();
+            OnCollectionReset();
         }
 
         public bool Contains(TFormula item)
@@ -103,8 +114,16 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public bool Remove(TFormula item)
         {
-            item.Referrer = null;
-            return list.Remove(item);
+            var success = list.Remove(item);
+            if (success)
+            {
+                SetReferrerWithoutNotification(item, null);
+                Unsubscribe(item);
+                OnCountPropertyChanged();
+                OnItemPropertyChanged();
+                OnCollectionRemoved(item);
+            }
+            return success;
         }
 
         public IEnumerator<TFormula> GetEnumerator()
@@ -117,93 +136,57 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             return GetEnumerator();
         }
 
-        int IList.Add(object value)
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public const string NameOfCount = "Count";
+        protected void OnCountPropertyChanged()
         {
-            ((Formula)value).Referrer = Referrer;
-            return _list.Add(value);
+            OnPropertyChanged(NameOfCount);
         }
 
-        void IList.Clear()
+        public const string NameOfItem = "Item[]";
+        protected void OnItemPropertyChanged()
         {
-            foreach (Formula item in _list)
+            OnPropertyChanged(NameOfItem);
+        }
+
+        protected void OnCollectionReset()
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        protected void OnCollectionAdded(TFormula item, int index)
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+        }
+
+        protected void OnCollectionRemoved(TFormula item)
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+        }
+
+        protected void OnCollectionRemoved(TFormula item, int index)
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+        }
+
+        protected void OnCollectionReplaced(TFormula newItem, TFormula oldItem, int index)
+        {
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
+        }
+
+        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            OnCollectionChanged(this, e);
+        }
+
+        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (CollectionChanged != null)
             {
-                item.Referrer = null;
-            }
-            _list.Clear();
-        }
-
-        bool IList.Contains(object value)
-        {
-            return _list.Contains(value);
-        }
-
-        int IList.IndexOf(object value)
-        {
-            return _list.IndexOf(value);
-        }
-
-        void IList.Insert(int index, object value)
-        {
-            ((Formula)value).Referrer = Referrer;
-            _list.Insert(index, value);
-        }
-
-        bool IList.IsFixedSize
-        {
-            get { return _list.IsFixedSize; }
-        }
-
-        bool IList.IsReadOnly
-        {
-            get { return _list.IsReadOnly; }
-        }
-
-        void IList.Remove(object value)
-        {
-            ((Formula)value).Referrer = null;
-            _list.Remove(value);
-        }
-
-        void IList.RemoveAt(int index)
-        {
-            ((Formula)_list[index]).Referrer = null;
-            _list.RemoveAt(index);
-        }
-
-        object IList.this[int index]
-        {
-            get
-            {
-                return _list[index];
-            }
-            set
-            {
-                ((Formula)_list[index]).Referrer = Referrer;
-                _list[index] = value;
+                CollectionChanged(this, e);
             }
         }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            _list.CopyTo(array, index);
-        }
-
-        int ICollection.Count
-        {
-            get { return _list.Count; }
-        }
-
-        bool ICollection.IsSynchronized
-        {
-            get { return _list.IsSynchronized; }
-        }
-
-        object ICollection.SyncRoot
-        {
-            get { return _list.SyncRoot; }
-        }
-
-        #endregion
 
         protected override Formula PinCore()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Urasandesu.NAnonym.ILTools;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -15,28 +16,38 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Test = default(Formula);
             IfTrue = default(Formula);
             IfFalse = default(Formula);
+            Initialize();
         }
 
-		public const string NameOfTest = "Test";
+        public const string NameOfTest = "Test";
         Formula test;
         public Formula Test 
         { 
             get { return test; } 
-            set { test = CheckCanModify(value); OnPropertyChanged(NameOfTest); } 
+            set 
+            {
+                SetFormula(NameOfTest, value, ref test);
+            }
         }
-		public const string NameOfIfTrue = "IfTrue";
+        public const string NameOfIfTrue = "IfTrue";
         Formula ifTrue;
         public Formula IfTrue 
         { 
             get { return ifTrue; } 
-            set { ifTrue = CheckCanModify(value); OnPropertyChanged(NameOfIfTrue); } 
+            set 
+            {
+                SetFormula(NameOfIfTrue, value, ref ifTrue);
+            }
         }
-		public const string NameOfIfFalse = "IfFalse";
+        public const string NameOfIfFalse = "IfFalse";
         Formula ifFalse;
         public Formula IfFalse 
         { 
             get { return ifFalse; } 
-            set { ifFalse = CheckCanModify(value); OnPropertyChanged(NameOfIfFalse); } 
+            set 
+            {
+                SetFormula(NameOfIfFalse, value, ref ifFalse);
+            }
         }
 
 

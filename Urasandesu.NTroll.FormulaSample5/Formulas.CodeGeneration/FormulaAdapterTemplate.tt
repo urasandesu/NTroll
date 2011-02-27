@@ -2,15 +2,15 @@
 <#+
 public class FormulaAdapterTemplate : Template
 {
-	public FormulaAdapterTemplate()
-	{
+    public FormulaAdapterTemplate()
+    {
         Templates = new List<FormulaTemplate>();
-	}
+    }
 
     public List<FormulaTemplate> Templates { get; private set; }
     
-	public override string TransformText()
-	{
+    public override string TransformText()
+    {
 #>
 using System;
 using System.Collections.Generic;
@@ -21,19 +21,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public abstract class FormulaAdapter : IFormulaVisitor
     {
-		IFormulaVisitor visitor;
-		public FormulaAdapter(IFormulaVisitor visitor)
-		{
-			this.visitor = visitor;
-		}
+        IFormulaVisitor visitor;
+        public FormulaAdapter(IFormulaVisitor visitor)
+        {
+            this.visitor = visitor;
+        }
 <#+ 
         foreach (var template in Templates)
         {
 #>
         public virtual Formula Visit(<#= template.TypeName #> formula)
-		{
-			return visitor.Visit(formula);
-		}
+        {
+            return visitor.Visit(formula);
+        }
 <#+ 
         }
 #>
@@ -41,6 +41,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 }
 <#+
         return this.GenerationEnvironment.ToString();
-	}
+    }
 }
 #>

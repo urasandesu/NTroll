@@ -8,24 +8,101 @@ using Urasandesu.NAnonym.Linq;
 using System.Collections.ObjectModel;
 using System.Collections;
 using System.Runtime.Serialization;
+using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class Formula
+    public abstract partial class Formula : INotifyPropertyChanged
     {
+        protected virtual void Initialize()
+        {
+        }
+
         public bool IsPinned { get; private set; }
 
-        protected T CheckCanModify<T>(T value)
+        protected void CheckCanModify(Formula formula)
         {
-            if (IsPinned)
+            if (formula != null && formula.IsPinned)
             {
                 throw new NotSupportedException("This object has already pinned, so it can not modify.");
             }
-            return value;
         }
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected void SetValue<T>(string propertyName, T value, ref T result)
         {
+            CheckCanModify(this);
+
+            result = value;
+
+            if (Referrer != null)
+            {
+                Referrer.OnPropertyChanged(propertyName);
+            }
+            OnPropertyChanged(propertyName);
+        }
+
+        protected void SetValueWithoutNotification<T>(string propertyName, T value, ref T result)
+        {
+            CheckCanModify(this);
+
+            result = value;
+        }
+
+        protected void SetFormula<TFormula>(string propertyName, TFormula formula, ref TFormula result) where TFormula : Formula
+        {
+            SetReferrerWithoutNotification(result, null);
+            Unsubscribe(result);
+            SetValue(propertyName, formula, ref result);
+            Subscribe(result);
+            SetReferrerWithoutNotification(result, this);
+        }
+
+        protected void SetFormulaWithoutNotification<TFormula>(string propertyName, TFormula formula, ref TFormula result) where TFormula : Formula
+        {
+            SetValueWithoutNotification(propertyName, formula, ref result);
+        }
+
+        protected void SetReferrerWithoutNotification(Formula target, Formula referrer)
+        {
+            if (target != null)
+            {
+                CheckCanModify(target.Referrer);
+                target.referrer = referrer;
+            }
+        }
+
+        protected virtual void Subscribe(Formula target)
+        {
+            if (target != null)
+            {
+                target.PropertyChanged += OnPropertyChanged;
+            }
+        }
+
+        protected virtual void Unsubscribe(Formula target)
+        {
+            if (target != null)
+            {
+                target.PropertyChanged -= OnPropertyChanged;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(this, e);
+        }
+
+        void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged == null) return;
+            PropertyChanged(sender, e);
         }
 
         public static Formula Pin(Formula item)
@@ -39,6 +116,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             return pinned;
         }
 
+        
         public static void AppendListTo<TFormula>(IList<TFormula> formulas, StringBuilder sb)
             where TFormula : Formula
         {
@@ -94,6 +172,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             AppendTo(sb);
             return sb.ToString();
         }
+
 
         public abstract Formula Accept(IFormulaVisitor visitor);
     }
