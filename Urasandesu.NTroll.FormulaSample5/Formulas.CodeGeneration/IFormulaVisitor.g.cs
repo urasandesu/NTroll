@@ -25,10 +25,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         Formula Visit(ConditionalFormula formula);
         Formula Visit(ReturnFormula formula);
         Formula Visit(CallFormula formula);
+        Formula Visit(ReflectiveCallFormula formula);
         Formula Visit(NewArrayInitFormula formula);
         Formula Visit(NewFormula formula);
+        Formula Visit(ReflectiveNewFormula formula);
         Formula Visit(MemberFormula formula);
         Formula Visit(PropertyFormula formula);
+        Formula Visit(ReflectivePropertyFormula formula);
         Formula Visit(FieldFormula formula);
+        Formula Visit(ReflectiveFieldFormula formula);
+        Formula Visit(EndFormula formula);
     }
 }

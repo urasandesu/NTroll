@@ -2,12 +2,12 @@
 <#+
 public class FormulaVisitorTemplate : Template
 {
-    public FormulaVisitorTemplate()
+    public FormulaVisitorTemplate(Dictionary<string, FormulaTemplate> templates)
     {
-        Templates = new List<FormulaTemplate>();
+        Templates = templates;
     }
 
-    public List<FormulaTemplate> Templates { get; private set; }
+    public Dictionary<string, FormulaTemplate> Templates { get; private set; }
     
     public override string TransformText()
     {
@@ -25,7 +25,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         foreach (var template in Templates)
         {
 #>
-        Formula Visit(<#= template.TypeName #> formula);
+        Formula Visit(<#= template.Value.TypeName #> formula);
 <#+ 
         }
 #>

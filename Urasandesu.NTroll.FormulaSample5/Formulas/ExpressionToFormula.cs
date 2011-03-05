@@ -144,7 +144,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             EvalArguments(exp.Expressions, state);
             var arguments = new Formula[state.Arguments.Count];
             state.Arguments.MoveTo(arguments);
-            state.CurrentBlock.Formulas.Push(new NewArrayInitFormula(arguments));
+            state.CurrentBlock.Formulas.Push(new NewArrayInitFormula(arguments, exp.Type));
         }
 
         public static void EvalArguments(ReadOnlyCollection<Expression> exps, ExpressionToFormulaState state)
@@ -320,6 +320,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordEndIfAttribute), false)) EvalEndIf(exp, state);
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordReturnAttribute), false)) EvalReturn(exp, state);
                     else if (exp.Method.IsDefined(typeof(MethodReservedWordConstMemberAttribute), false)) EvalConstMember(exp, state);
+                    else if (exp.Method.IsDefined(typeof(MethodReservedWordEndAttribute), false)) EvalEnd(exp, state);
                     else
                     {
                         throw new NotImplementedException();
@@ -355,6 +356,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                     }
                 }
             }
+        }
+
+        public static void EvalEnd(MethodCallExpression exp, ExpressionToFormulaState state)
+        {
+            var end = new EndFormula() { TypeDeclaration = state.CurrentBlock.TypeDeclaration };
+            state.CurrentBlock.Formulas.Push(end);
+            state.IsEnded = true;
         }
 
         public static void EvalConstMember(MethodCallExpression exp, ExpressionToFormulaState state)
@@ -412,7 +420,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 throw new NotImplementedException();
             }
-            state.CurrentBlock.Formulas.Push(new CallFormula(instance, mi, arguments));
+            state.CurrentBlock.Formulas.Push(new ReflectiveCallFormula(instance, mi, arguments));
         }
 
         public static void EvalConstructorInfoInvoke_objects(MethodCallExpression exp, ExpressionToFormulaState state)
@@ -434,7 +442,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 throw new NotImplementedException();
             }
-            state.CurrentBlock.Formulas.Push(new NewFormula(ci, arguments));
+            state.CurrentBlock.Formulas.Push(new ReflectiveNewFormula(ci, arguments));
         }
 
         public static void EvalPropertyInfoSetValue_object_object_objects(MethodCallExpression exp, ExpressionToFormulaState state)
@@ -448,7 +456,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 EvalExpression(exp.Arguments[0], state);
                 instance = state.CurrentBlock.Formulas.Pop();
             }
-            var left = new PropertyFormula(instance, pi);
+            var left = new ReflectivePropertyFormula(instance, pi);
             EvalExpression(exp.Arguments[1], state);
             var right = state.CurrentBlock.Formulas.Pop();
             state.CurrentBlock.Formulas.Push(new AssignFormula() { Left = left, Right = right });
@@ -465,7 +473,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 EvalExpression(exp.Arguments[0], state);
                 instance = state.CurrentBlock.Formulas.Pop();
             }
-            state.CurrentBlock.Formulas.Push(new PropertyFormula(instance, pi));
+            state.CurrentBlock.Formulas.Push(new ReflectivePropertyFormula(instance, pi));
         }
 
         public static void EvalFieldInfoSetValue_object_object(MethodCallExpression exp, ExpressionToFormulaState state)
@@ -478,7 +486,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 EvalExpression(exp.Arguments[0], state);
                 instance = state.CurrentBlock.Formulas.Pop();
             }
-            var left = new FieldFormula(instance, fi);
+            var left = new ReflectiveFieldFormula(instance, fi);
             EvalExpression(exp.Arguments[1], state);
             var right = state.CurrentBlock.Formulas.Pop();
             state.CurrentBlock.Formulas.Push(new AssignFormula() { Left = left, Right = right });
@@ -494,7 +502,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 EvalExpression(exp.Arguments[0], state);
                 instance = state.CurrentBlock.Formulas.Pop();
             }
-            state.CurrentBlock.Formulas.Push(new FieldFormula(instance, fi));
+            state.CurrentBlock.Formulas.Push(new ReflectiveFieldFormula(instance, fi));
         }
 
         public static void EvalIf(MethodCallExpression exp, ExpressionToFormulaState state)

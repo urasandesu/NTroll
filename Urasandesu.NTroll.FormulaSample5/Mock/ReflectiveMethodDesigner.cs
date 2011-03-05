@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq.Expressions;
 using Urasandesu.NAnonym.ILTools;
 using Urasandesu.NTroll.FormulaSample5.Formulas;
+using Urasandesu.NAnonym.Mixins.Urasandesu.NAnonym.ILTools;
 
 namespace Urasandesu.NTroll.FormulaSample5.Mock
 {
@@ -30,6 +31,10 @@ namespace Urasandesu.NTroll.FormulaSample5.Mock
                 //   ・型チェック、戻り値の確定。
                 //   ・無駄な Convert の排除（最適化）。
                 //   ・IL の生成。
+                var noActionVisitor = new FormulaNoActionVisitor();
+                var convertReducer = new ConvertReducer(noActionVisitor);
+                var convertIncreaser = new ConvertIncreaser(convertReducer);
+                state.CurrentBlock.Accept(convertIncreaser);
                 Formula.Pin(state.CurrentBlock);
             }
         }
@@ -37,6 +42,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Mock
         public string Dump()
         {
             return state.CurrentBlock.ToString();
+        }
+    }
+
+    class ConvertIncreaser : FormulaAdapter
+    {
+        public ConvertIncreaser(IFormulaVisitor visitor)
+            : base(visitor)
+        {
         }
     }
 }

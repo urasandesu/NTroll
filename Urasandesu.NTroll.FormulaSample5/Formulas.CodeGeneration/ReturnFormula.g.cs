@@ -9,12 +9,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class ReturnFormula : Formula
     {
-        public ReturnFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Return;
             Body = default(Formula);
-            Initialize();
         }
 
         public const string NameOfBody = "Body";
@@ -35,16 +35,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Body = Formula.Pin(Body);
-            return base.PinCore();
+            Formula.Pin(Body);
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
@@ -56,9 +55,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Body.AppendTo(sb);
+                Body.AppendWithBracketTo(sb);
             }
-            sb.Append("}");
         }
     }
 }

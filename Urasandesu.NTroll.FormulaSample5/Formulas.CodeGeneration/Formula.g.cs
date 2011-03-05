@@ -12,10 +12,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public Formula()
             : base()
         {
+            InitializeForCodeGeneration();
+            Initialize();
+        }
+
+        protected virtual void InitializeForCodeGeneration()
+        {
             Referrer = default(Formula);
             NodeType = NodeType.None;
             TypeDeclaration = default(ITypeDeclaration);
-            Initialize();
         }
 
         public const string NameOfReferrer = "Referrer";
@@ -50,10 +55,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected virtual Formula PinCore()
+        protected virtual void PinCore()
         {
-            Referrer = Formula.Pin(Referrer);
-            return this;
+            Formula.Pin(Referrer);
         }
 
 

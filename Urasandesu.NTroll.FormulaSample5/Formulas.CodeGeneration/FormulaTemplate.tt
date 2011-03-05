@@ -36,13 +36,27 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public <#= IsAbstract ? "abstract " : "" #>partial class <#= TypeName #> : <#= BaseTypeName #>
     {
+<#+ 
+        if (BaseTypeName == "INotifyPropertyChanged")
+        {
+#>
         public <#= TypeName #>()
             : base()
+        {
+            InitializeForCodeGeneration();
+            Initialize();
+        }
+<#+ 
+        }
+#>
+
+        protected <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> void InitializeForCodeGeneration()
         {
 <#+ 
         if (BaseTypeName != "INotifyPropertyChanged")
         {
 #>
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.<#= NodeType.ToString() #>;
 <#+ 
         }
@@ -55,7 +69,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 <#+ 
             }
 #>
-            Initialize();
         }
 
 <#+ 
@@ -136,28 +149,22 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 #>
 
 
-        protected <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> Formula PinCore()
+        protected <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> void PinCore()
         {
 <#+ 
             foreach (var property in TemplateProperties.Where(_ => -1 < _.TypeName.IndexOf("Formula")))
             {
 #>
-            <#= property.Name #> = <#= property.TypeName == "Formula" ? "" : "(" + property.TypeName + ")" #>Formula.Pin(<#= property.Name #>);
+            Formula.Pin(<#= property.Name #>);
 <#+ 
             }
 #>
 <#+ 
-            if (BaseTypeName == "INotifyPropertyChanged")
+            if (BaseTypeName != "INotifyPropertyChanged")
             {
 #>
-            return this;
+            base.PinCore();
 <#+  
-            }
-            else
-            {
-#>
-            return base.PinCore();
-<#+ 
             }
 #>
         }
@@ -165,14 +172,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
         public <#= BaseTypeName == "INotifyPropertyChanged" ? "virtual" : "override" #> void AppendTo(StringBuilder sb)
         {
-<#+  
-        if (!IsAbstract)
-        {
-#>
-            sb.Append("{");
-<#+ 
-        }
-#>
 <#+ 
         if (BaseTypeName != "INotifyPropertyChanged")
         {
@@ -181,8 +180,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 <#+ 
         }
 #>
-<#+ 
-        TemplateProperties.Where(_ => !_.ProhibitsToString).ForEach(
+<#+
+		TemplateProperties.Where(_ => !_.ProhibitsToString).ForEach(
         (property, propertyIndex) =>
         {
             if (BaseTypeName != "INotifyPropertyChanged" || 0 < propertyIndex)
@@ -193,14 +192,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }            
             WriteAppendingProperty(property);
         });
-#>
-<#+  
-        if (!IsAbstract)
-        {
-#>
-            sb.Append("}");
-<#+ 
-        }
 #>
         }
     }
@@ -227,7 +218,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                <#= property.Name #>.AppendTo(sb);
+                <#= property.Name #>.AppendWithBracketTo(sb);
             }
 <#+  
         }

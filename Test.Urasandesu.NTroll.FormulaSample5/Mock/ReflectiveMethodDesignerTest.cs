@@ -48,8 +48,11 @@ namespace Test.Urasandesu.NTroll.FormulaSample5.Mock
                 gen.Eval(() => Dsl.Return(value == 30 ? value + value : value * value));
             }
             gen.Eval(() => Dsl.EndIf());
-            //gen.Eval(() => Dsl.End());
+            gen.Eval(() => Dsl.End());
             Console.WriteLine(gen.Dump());
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         [Test]
@@ -84,7 +87,11 @@ namespace Test.Urasandesu.NTroll.FormulaSample5.Mock
             var getValue = typeof(TestHelper).GetMethod("GetValue", new Type[] { typeof(int) });
             var value = default(int);
             gen.Eval(() => Dsl.Allocate(value).As((int)getValue.Invoke(null, new object[] { f2ValueField.GetValue(f2) })));
+            gen.Eval(() => Dsl.End());
             Console.WriteLine(gen.Dump());
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         [Test]

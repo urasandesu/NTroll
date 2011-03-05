@@ -9,11 +9,11 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class EqualFormula : BinaryFormula
     {
-        public EqualFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Equal;
-            Initialize();
         }
 
 
@@ -24,17 +24,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            return base.PinCore();
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
-            sb.Append("}");
         }
     }
 }

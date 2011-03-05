@@ -9,12 +9,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class ConstantFormula : Formula
     {
-        public ConstantFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Constant;
             ConstantValue = default(object);
-            Initialize();
         }
 
         public const string NameOfConstantValue = "ConstantValue";
@@ -35,22 +35,20 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            return base.PinCore();
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
             sb.Append(NameOfConstantValue);
             sb.Append("\": ");
             AppendValueTo(ConstantValue, sb);
-            sb.Append("}");
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using Urasandesu.NAnonym;
 using System.Collections.Specialized;
+using Urasandesu.NAnonym.Linq;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -41,7 +42,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Subscribe(item);
             OnCountPropertyChanged();
             OnItemPropertyChanged();
-            OnCollectionAdded(item, index);
+            ReceiveCollectionAdded(item, index);
         }
 
         public void RemoveAt(int index)
@@ -52,7 +53,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             Unsubscribe(removingItem);
             OnCountPropertyChanged();
             OnItemPropertyChanged();
-            OnCollectionRemoved(removingItem, index);
+            ReceiveCollectionRemoved(removingItem, index);
         }
 
         public TFormula this[int index]
@@ -70,7 +71,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 SetReferrerWithoutNotification(value, Referrer);
                 Subscribe(value);
                 OnItemPropertyChanged();
-                OnCollectionReplaced(value, replacingItem, index);
+                ReceiveCollectionReplaced(value, replacingItem, index);
             }
         }
 
@@ -89,7 +90,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             list.Clear();
             OnCountPropertyChanged();
             OnItemPropertyChanged();
-            OnCollectionReset();
+            ReceiveCollectionReset();
         }
 
         public bool Contains(TFormula item)
@@ -121,7 +122,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
                 Unsubscribe(item);
                 OnCountPropertyChanged();
                 OnItemPropertyChanged();
-                OnCollectionRemoved(item);
+                ReceiveCollectionRemoved(item);
             }
             return success;
         }
@@ -141,67 +142,108 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public const string NameOfCount = "Count";
         protected void OnCountPropertyChanged()
         {
-            OnPropertyChanged(NameOfCount);
+            ReceivePropertyChanged(NameOfCount);
         }
 
         public const string NameOfItem = "Item[]";
         protected void OnItemPropertyChanged()
         {
-            OnPropertyChanged(NameOfItem);
+            ReceivePropertyChanged(NameOfItem);
         }
 
-        protected void OnCollectionReset()
+        public override bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
         {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        protected void OnCollectionAdded(TFormula item, int index)
-        {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-        }
-
-        protected void OnCollectionRemoved(TFormula item)
-        {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
-        }
-
-        protected void OnCollectionRemoved(TFormula item, int index)
-        {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
-        }
-
-        protected void OnCollectionReplaced(TFormula newItem, TFormula oldItem, int index)
-        {
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
-        }
-
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            OnCollectionChanged(this, e);
-        }
-
-        void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (CollectionChanged != null)
+            if (managerType == typeof(CollectionChangedEventManager))
             {
-                CollectionChanged(this, e);
+                return ReceiveCollectionChangedWithReentrantGuard(sender, (NotifyCollectionChangedEventArgs)e);
+            }
+            else
+            {
+                return base.ReceiveWeakEvent(managerType, sender, e);
             }
         }
 
-        protected override Formula PinCore()
+        bool duringCollectionChanged;
+        bool ReceiveCollectionChangedWithReentrantGuard(object sender, NotifyCollectionChangedEventArgs e)
         {
-            Initialize(new ReadOnlyCollection<TFormula>(list));
-            return base.PinCore();
+            if (duringCollectionChanged) return true;
+            try
+            {
+                duringCollectionChanged = true;
+                return ReceiveCollectionChangedCore(sender, e);
+            }
+            finally
+            {
+                duringCollectionChanged = false;
+            }
         }
 
-        public override void AppendTo(StringBuilder sb)
+        protected bool ReceiveCollectionReset()
         {
-            AppendListTo(this, sb);
+            return ReceiveCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        protected bool ReceiveCollectionAdded(TFormula item, int index)
+        {
+            return ReceiveCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
+        }
+
+        protected bool ReceiveCollectionRemoved(TFormula item)
+        {
+            return ReceiveCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
+        }
+
+        protected bool ReceiveCollectionRemoved(TFormula item, int index)
+        {
+            return ReceiveCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item, index));
+        }
+
+        protected bool ReceiveCollectionReplaced(TFormula newItem, TFormula oldItem, int index)
+        {
+            return ReceiveCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
+        }
+
+        protected bool ReceiveCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            return ReceiveCollectionChangedCore(this, e);
+        }
+
+        protected virtual bool ReceiveCollectionChangedCore(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (CollectionChanged == null) return true;
+            CollectionChanged(sender, e);
+            return true;
+        }
+
+        protected override void PinCore()
+        {
+            Initialize(new ReadOnlyCollection<TFormula>(list));
+            base.PinCore();
+        }
+
+        public override void AppendWithBracketTo(StringBuilder sb)
+        {
+            sb.Append("[");
+            var oneOrMore = false;
+            foreach (var formula in list)
+            {
+                if (!oneOrMore)
+                {
+                    oneOrMore = true;
+                    formula.AppendWithBracketTo(sb);
+                }
+                else
+                {
+                    sb.Append(", ");
+                    formula.AppendWithBracketTo(sb);
+                }
+            }
+            sb.Append("]");
         }
 
         public override Formula Accept(IFormulaVisitor visitor)
         {
-            throw new NotImplementedException();
+            return list.Select(_ => _.Accept(visitor)).LastOrDefault();
         }
     }
 }

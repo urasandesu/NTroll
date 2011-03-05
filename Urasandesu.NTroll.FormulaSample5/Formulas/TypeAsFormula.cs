@@ -9,7 +9,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public partial class TypeAsFormula : UnaryFormula
     {
         public TypeAsFormula(Formula operand, Type type)
-            : this()
         {
             Operand = operand;
             TypeDeclaration = type.ToTypeDecl();

@@ -9,7 +9,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public partial class ConvertFormula : UnaryFormula
     {
         public ConvertFormula(Formula operand, Type type)
-            : this()
         {
             Operand = operand;
             TypeDeclaration = type.ToTypeDecl();

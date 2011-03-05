@@ -9,14 +9,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class ConditionalFormula : Formula
     {
-        public ConditionalFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Conditional;
             Test = default(Formula);
             IfTrue = default(Formula);
             IfFalse = default(Formula);
-            Initialize();
         }
 
         public const string NameOfTest = "Test";
@@ -57,18 +57,17 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Test = Formula.Pin(Test);
-            IfTrue = Formula.Pin(IfTrue);
-            IfFalse = Formula.Pin(IfFalse);
-            return base.PinCore();
+            Formula.Pin(Test);
+            Formula.Pin(IfTrue);
+            Formula.Pin(IfFalse);
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
@@ -80,7 +79,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Test.AppendTo(sb);
+                Test.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -92,7 +91,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                IfTrue.AppendTo(sb);
+                IfTrue.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -104,9 +103,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                IfFalse.AppendTo(sb);
+                IfFalse.AppendWithBracketTo(sb);
             }
-            sb.Append("}");
         }
     }
 }

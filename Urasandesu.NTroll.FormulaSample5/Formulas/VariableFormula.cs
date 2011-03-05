@@ -9,7 +9,6 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public partial class VariableFormula : Formula
     {
         public VariableFormula(string variableName, Type type)
-            : this()
         {
             VariableName = variableName;
             TypeDeclaration = type.ToTypeDecl();

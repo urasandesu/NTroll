@@ -9,23 +9,17 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
     public partial class ReturnFormula : Formula
     {
         public ReturnFormula(Formula body)
-            : this()
         {
             Body = body;
         }
 
-        protected override void Initialize()
-        {
-            base.Initialize();
-            PropertyChanged += new PropertyChangedEventHandler(ReturnFormula_PropertyChanged);
-        }
-
-        void ReturnFormula_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override bool ReceivePropertyChangedCore(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == NameOfBody)
             {
                 TypeDeclaration = Body == null ? null : Body.TypeDeclaration;
             }
+            return base.ReceivePropertyChangedCore(sender, e);
         }
     }
 }

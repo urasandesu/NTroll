@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using Urasandesu.NAnonym.Linq;
 using System.Reflection;
+using Urasandesu.NAnonym;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {

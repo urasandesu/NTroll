@@ -9,16 +9,16 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class BlockFormula : Formula
     {
-        public BlockFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Block;
             ParentBlock = default(BlockFormula);
             ChildBlocks = new FormulaCollection<BlockFormula>();
             Variables = new FormulaCollection<Formula>();
             Formulas = new FormulaCollection<Formula>();
             Result = default(Formula);
-            Initialize();
         }
 
         public const string NameOfParentBlock = "ParentBlock";
@@ -79,20 +79,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            ParentBlock = (BlockFormula)Formula.Pin(ParentBlock);
-            ChildBlocks = (FormulaCollection<BlockFormula>)Formula.Pin(ChildBlocks);
-            Variables = (FormulaCollection<Formula>)Formula.Pin(Variables);
-            Formulas = (FormulaCollection<Formula>)Formula.Pin(Formulas);
-            Result = Formula.Pin(Result);
-            return base.PinCore();
+            Formula.Pin(ParentBlock);
+            Formula.Pin(ChildBlocks);
+            Formula.Pin(Variables);
+            Formula.Pin(Formulas);
+            Formula.Pin(Result);
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
@@ -104,7 +103,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                ChildBlocks.AppendTo(sb);
+                ChildBlocks.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -116,7 +115,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Variables.AppendTo(sb);
+                Variables.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -128,7 +127,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Formulas.AppendTo(sb);
+                Formulas.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -140,9 +139,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Result.AppendTo(sb);
+                Result.AppendWithBracketTo(sb);
             }
-            sb.Append("}");
         }
     }
 }

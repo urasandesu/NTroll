@@ -1,13 +1,13 @@
 ﻿<#@ import namespace="System.Collections.Generic" #>
 <#+
-public class FormulaInactionVisitorTemplate : Template
+public class FormulaNoActionVisitorTemplate : Template
 {
-    public FormulaInactionVisitorTemplate()
+    public FormulaNoActionVisitorTemplate(Dictionary<string, FormulaTemplate> template)
     {
-        Templates = new List<FormulaTemplate>();
+        Templates = template;
     }
 
-    public List<FormulaTemplate> Templates { get; private set; }
+    public Dictionary<string, FormulaTemplate> Templates { get; private set; }
     
     public override string TransformText()
     {
@@ -19,13 +19,13 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public class FormulaInactionVisitor : IFormulaVisitor
+    public class FormulaNoActionVisitor : IFormulaVisitor
     {
 <#+ 
         foreach (var template in Templates)
         {
 #>
-        public Formula Visit(<#= template.TypeName #> formula)
+        public Formula Visit(<#= template.Value.TypeName #> formula)
         {
             return formula;
         }

@@ -9,14 +9,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public abstract partial class BinaryFormula : Formula
     {
-        public BinaryFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.None;
             Left = default(Formula);
             Method = default(IMethodDeclaration);
             Right = default(Formula);
-            Initialize();
         }
 
         public const string NameOfLeft = "Left";
@@ -52,11 +52,11 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Left = Formula.Pin(Left);
-            Right = Formula.Pin(Right);
-            return base.PinCore();
+            Formula.Pin(Left);
+            Formula.Pin(Right);
+            base.PinCore();
         }
 
 
@@ -73,7 +73,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Left.AppendTo(sb);
+                Left.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");
@@ -90,7 +90,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Right.AppendTo(sb);
+                Right.AppendWithBracketTo(sb);
             }
         }
     }

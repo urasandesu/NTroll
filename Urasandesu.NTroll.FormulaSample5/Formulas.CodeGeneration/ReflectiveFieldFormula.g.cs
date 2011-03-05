@@ -7,13 +7,13 @@ using System.ComponentModel;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public partial class AddFormula : BinaryFormula
+    public partial class ReflectiveFieldFormula : FieldFormula
     {
 
         protected override void InitializeForCodeGeneration()
         {
             base.InitializeForCodeGeneration();
-            NodeType = NodeType.Add;
+            NodeType = NodeType.ReflectiveField;
         }
 
 

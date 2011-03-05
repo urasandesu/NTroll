@@ -58,5 +58,10 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         Property,
         Block,
         Return,
+        End,
+        ReflectiveCall,
+        ReflectiveNew,
+        ReflectiveProperty,
+        ReflectiveField,
     }
 }

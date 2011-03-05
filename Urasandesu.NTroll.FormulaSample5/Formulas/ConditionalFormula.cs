@@ -8,19 +8,14 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class ConditionalFormula : Formula
     {
-        protected override void Initialize()
-        {
-            base.Initialize();
-            PropertyChanged += new PropertyChangedEventHandler(ConditionalFormula_PropertyChanged);
-        }
-
-        void ConditionalFormula_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override bool ReceivePropertyChangedCore(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == NameOfIfTrue ||
                 sender != this && e.PropertyName == ConditionalFormula.NameOfTypeDeclaration)
             {
                 TypeDeclaration = IfTrue == null ? null : IfTrue.TypeDeclaration;
             }
+            return base.ReceivePropertyChangedCore(sender, e);
         }
     }
 }

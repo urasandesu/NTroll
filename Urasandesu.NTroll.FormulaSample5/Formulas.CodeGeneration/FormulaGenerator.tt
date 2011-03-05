@@ -2,35 +2,32 @@
 <#@ include file="FormulaTemplate.tt" #>
 <#@ include file="FormulaVisitorTemplate.tt" #>
 <#@ include file="FormulaAdapterTemplate.tt" #>
-<#@ include file="FormulaInactionVisitorTemplate.tt" #>
+<#@ include file="FormulaNoActionVisitorTemplate.tt" #>
 <#+
 public class FormulaGenerator : Generator
 {
     public FormulaGenerator()
     {
-        Templates = new List<FormulaTemplate>();
+        Templates = new Dictionary<string, FormulaTemplate>();
     }
     
-    public List<FormulaTemplate> Templates { get; private set; }
+    public Dictionary<string, FormulaTemplate> Templates { get; private set; }
     
     protected override void RunCore()
     {
         foreach (var template in Templates)
         {
-            template.RenderToFile(template.TypeName + ".g.cs");
+            template.Value.RenderToFile(template.Key + ".g.cs");
         }
         
-        var visitorTemplate = new FormulaVisitorTemplate();
-        visitorTemplate.Templates.AddRange(Templates);
+        var visitorTemplate = new FormulaVisitorTemplate(Templates);
         visitorTemplate.RenderToFile("IFormulaVisitor.g.cs");
         
-        var adapterTemplate = new FormulaAdapterTemplate();
-        adapterTemplate.Templates.AddRange(Templates);
+        var adapterTemplate = new FormulaAdapterTemplate(Templates);
         adapterTemplate.RenderToFile("FormulaAdapter.g.cs");
         
-        var inactionVisitorTemplate = new FormulaInactionVisitorTemplate();
-        inactionVisitorTemplate.Templates.AddRange(Templates);
-        inactionVisitorTemplate.RenderToFile("FormulaInactionVisitor.g.cs");
+        var noActionVisitorTemplate = new FormulaNoActionVisitorTemplate(Templates);
+        noActionVisitorTemplate.RenderToFile("FormulaNoActionVisitor.g.cs");
     }
 }
 #>

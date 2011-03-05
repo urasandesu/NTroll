@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public class FormulaInactionVisitor : IFormulaVisitor
+    public class FormulaNoActionVisitor : IFormulaVisitor
     {
         public Formula Visit(BinaryFormula formula)
         {
@@ -79,11 +79,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             return formula;
         }
+        public Formula Visit(ReflectiveCallFormula formula)
+        {
+            return formula;
+        }
         public Formula Visit(NewArrayInitFormula formula)
         {
             return formula;
         }
         public Formula Visit(NewFormula formula)
+        {
+            return formula;
+        }
+        public Formula Visit(ReflectiveNewFormula formula)
         {
             return formula;
         }
@@ -95,7 +103,19 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             return formula;
         }
+        public Formula Visit(ReflectivePropertyFormula formula)
+        {
+            return formula;
+        }
         public Formula Visit(FieldFormula formula)
+        {
+            return formula;
+        }
+        public Formula Visit(ReflectiveFieldFormula formula)
+        {
+            return formula;
+        }
+        public Formula Visit(EndFormula formula)
         {
             return formula;
         }

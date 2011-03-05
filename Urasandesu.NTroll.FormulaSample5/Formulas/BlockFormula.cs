@@ -8,15 +8,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class BlockFormula : Formula
     {
-        protected override void Initialize()
+        protected override bool ReceivePropertyChangedCore(object sender, PropertyChangedEventArgs e)
         {
-            base.Initialize();
-            PropertyChanged += new PropertyChangedEventHandler(BlockFormula_PropertyChanged);
-        }
-
-        void BlockFormula_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == FormulaCollection<Formula>.NameOfCount)
+            if (e.PropertyName == FormulaCollection<Formula>.NameOfCount && sender == Formulas)
             {
                 Result = Formulas == null || Formulas.Count == 0 ? null : Formulas[Formulas.Count - 1];
             }
@@ -25,6 +19,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             {
                 TypeDeclaration = Result == null ? null : Result.TypeDeclaration;
             }
+            return base.ReceivePropertyChangedCore(sender, e);
         }
     }
 }

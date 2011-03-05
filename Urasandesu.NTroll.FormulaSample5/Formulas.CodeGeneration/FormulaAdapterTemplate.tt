@@ -1,13 +1,15 @@
-﻿<#@ import namespace="System.Collections.Generic" #>
+﻿<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="System.Core" #>
 <#+
 public class FormulaAdapterTemplate : Template
 {
-    public FormulaAdapterTemplate()
+    public FormulaAdapterTemplate(Dictionary<string, FormulaTemplate> template)
     {
-        Templates = new List<FormulaTemplate>();
+        Templates = template;
     }
 
-    public List<FormulaTemplate> Templates { get; private set; }
+    public Dictionary<string, FormulaTemplate> Templates { get; private set; }
     
     public override string TransformText()
     {
@@ -30,8 +32,24 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         foreach (var template in Templates)
         {
 #>
-        public virtual Formula Visit(<#= template.TypeName #> formula)
+        public virtual Formula Visit(<#= template.Value.TypeName #> formula)
         {
+<#+ 
+			if (template.Value.BaseTypeName != "INotifyPropertyChanged")
+			{
+#>
+            Visit((<#= template.Value.BaseTypeName #>)formula);
+<#+ 
+			}
+#>
+<#+ 
+			foreach (var property in template.Value.TemplateProperties.Where(_ => !_.ProhibitsDefaultAccepting && -1 < _.TypeName.IndexOf("Formula")))
+			{
+#>
+            if (formula.<#= property.Name #> != null) formula.<#= property.Name #>.Accept(this);
+<#+ 
+			}
+#>
             return visitor.Visit(formula);
         }
 <#+ 
@@ -42,5 +60,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 <#+
         return this.GenerationEnvironment.ToString();
     }
+	
+	IEnumerable<FormulaTemplateProperty> GetDefaultAcceptingProperties(FormulaTemplate template)
+	{
+		var properties = Enumerable.Empty<FormulaTemplateProperty>();
+		if (Templates.ContainsKey(template.BaseTypeName))
+		{
+			properties = properties.Concat(GetDefaultAcceptingProperties(Templates[template.BaseTypeName]));
+		}
+		return properties.Concat(template.TemplateProperties.Where(_ => !_.ProhibitsDefaultAccepting && -1 < _.TypeName.IndexOf("Formula")));
+	}
 }
 #>

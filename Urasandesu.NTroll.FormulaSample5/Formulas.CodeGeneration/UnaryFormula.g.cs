@@ -9,13 +9,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public abstract partial class UnaryFormula : Formula
     {
-        public UnaryFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.None;
             Method = default(IMethodDeclaration);
             Operand = default(Formula);
-            Initialize();
         }
 
         public const string NameOfMethod = "Method";
@@ -41,10 +41,10 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Operand = Formula.Pin(Operand);
-            return base.PinCore();
+            Formula.Pin(Operand);
+            base.PinCore();
         }
 
 
@@ -66,7 +66,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Operand.AppendTo(sb);
+                Operand.AppendWithBracketTo(sb);
             }
         }
     }

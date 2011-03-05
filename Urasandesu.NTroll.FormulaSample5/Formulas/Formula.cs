@@ -9,10 +9,11 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using System.Runtime.Serialization;
 using System.ComponentModel;
+using System.Windows;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
-    public abstract partial class Formula : INotifyPropertyChanged
+    public abstract partial class Formula : INotifyPropertyChanged, IWeakEventListener
     {
         protected virtual void Initialize()
         {
@@ -36,9 +37,9 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 
             if (Referrer != null)
             {
-                Referrer.OnPropertyChanged(propertyName);
+                Referrer.ReceivePropertyChanged(propertyName);
             }
-            OnPropertyChanged(propertyName);
+            ReceivePropertyChanged(propertyName);
         }
 
         protected void SetValueWithoutNotification<T>(string propertyName, T value, ref T result)
@@ -75,7 +76,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             if (target != null)
             {
-                target.PropertyChanged += OnPropertyChanged;
+                PropertyChangedEventManager.AddListener(target, this, string.Empty);
             }
         }
 
@@ -83,59 +84,63 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         {
             if (target != null)
             {
-                target.PropertyChanged -= OnPropertyChanged;
+                PropertyChangedEventManager.RemoveListener(target, this, string.Empty);
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
+        public virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            if (managerType == typeof(PropertyChangedEventManager))
+            {
+                return ReceivePropertyChangedWithReentrantGuard(sender, (PropertyChangedEventArgs)e);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+        bool duringPropertyChanged;
+        bool ReceivePropertyChangedWithReentrantGuard(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged(this, e);
+            if (duringPropertyChanged) return true;
+            try
+            {
+                duringPropertyChanged = true;
+                return ReceivePropertyChangedCore(sender, e);
+            }
+            finally
+            {
+                duringPropertyChanged = false;
+            }
         }
 
-        void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected bool ReceivePropertyChanged(string propertyName)
         {
-            if (PropertyChanged == null) return;
+            return ReceivePropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool ReceivePropertyChanged(PropertyChangedEventArgs e)
+        {
+            return ReceivePropertyChangedCore(this, e);
+        }
+
+        protected virtual bool ReceivePropertyChangedCore(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged == null) return true;
             PropertyChanged(sender, e);
+            return true;
         }
 
-        public static Formula Pin(Formula item)
+        public static void Pin(Formula item)
         {
-            var pinned = default(Formula);
             if (item != null && !item.IsPinned)
             {
-                pinned = item.PinCore();
-                pinned.IsPinned = true;
+                item.IsPinned = true;
+                item.PinCore();
             }
-            return pinned;
-        }
-
-        
-        public static void AppendListTo<TFormula>(IList<TFormula> formulas, StringBuilder sb)
-            where TFormula : Formula
-        {
-            sb.Append("[");
-            var oneOrMore = false;
-            foreach (var formula in formulas)
-            {
-                if (!oneOrMore)
-                {
-                    oneOrMore = true;
-                    formula.AppendTo(sb);
-                }
-                else
-                {
-                    sb.Append(", ");
-                    formula.AppendTo(sb);
-                }
-            }
-            sb.Append("]");
         }
 
         public static void AppendValueTo<TValue>(TValue value, StringBuilder sb)
@@ -169,10 +174,16 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         public override string ToString()
         {
             var sb = new StringBuilder();
-            AppendTo(sb);
+            AppendWithBracketTo(sb);
             return sb.ToString();
         }
 
+        public virtual void AppendWithBracketTo(StringBuilder sb)
+        {
+            sb.Append("{");
+            AppendTo(sb);
+            sb.Append("}");
+        }
 
         public abstract Formula Accept(IFormulaVisitor visitor);
     }

@@ -9,12 +9,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class FieldFormula : MemberFormula
     {
-        public FieldFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Field;
             Member = default(IFieldDeclaration);
-            Initialize();
         }
 
         public const string NameOfMember = "Member";
@@ -36,22 +36,20 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            return base.PinCore();
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
             sb.Append(NameOfMember);
             sb.Append("\": ");
             AppendValueTo(Member, sb);
-            sb.Append("}");
         }
     }
 }

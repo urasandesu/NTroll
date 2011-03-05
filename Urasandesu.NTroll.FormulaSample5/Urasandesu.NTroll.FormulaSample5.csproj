@@ -79,6 +79,9 @@
     <Compile Include="Formulas.CodeGeneration\ConvertFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\EndFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\EqualFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
@@ -94,7 +97,7 @@
     <Compile Include="Formulas.CodeGeneration\FormulaAdapter.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
-    <Compile Include="Formulas.CodeGeneration\FormulaInactionVisitor.g.cs">
+    <Compile Include="Formulas.CodeGeneration\FormulaNoActionVisitor.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
     <Compile Include="Formulas.CodeGeneration\IFormulaVisitor.g.cs">
@@ -118,6 +121,18 @@
     <Compile Include="Formulas.CodeGeneration\PropertyFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
+    <Compile Include="Formulas.CodeGeneration\ReflectiveCallFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ReflectiveFieldFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ReflectiveNewFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Formulas.CodeGeneration\ReflectivePropertyFormula.g.cs">
+      <DependentUpon>Formulas.tt</DependentUpon>
+    </Compile>
     <Compile Include="Formulas.CodeGeneration\ReturnFormula.g.cs">
       <DependentUpon>Formulas.tt</DependentUpon>
     </Compile>
@@ -139,6 +154,7 @@
     <Compile Include="Formulas\ConditionalFormula.cs" />
     <Compile Include="Formulas\ConstantFormula.cs" />
     <Compile Include="Formulas\ConvertFormula.cs" />
+    <Compile Include="Formulas\ConvertReducer.cs" />
     <Compile Include="Formulas\EqualFormula.cs" />
     <Compile Include="Formulas\ExclusiveOrFormula.cs" />
     <Compile Include="Formulas\ExpressionToFormula.cs" />
@@ -154,6 +170,10 @@
     <Compile Include="Formulas\NodeType.cs" />
     <Compile Include="Formulas\NotEqualFormula.cs" />
     <Compile Include="Formulas\PropertyFormula.cs" />
+    <Compile Include="Formulas\ReflectiveCallFormula.cs" />
+    <Compile Include="Formulas\ReflectiveFieldFormula.cs" />
+    <Compile Include="Formulas\ReflectiveNewFormula.cs" />
+    <Compile Include="Formulas\ReflectivePropertyFormula.cs" />
     <Compile Include="Formulas\ReturnFormula.cs" />
     <Compile Include="Formulas\TypeAsFormula.cs" />
     <Compile Include="Formulas\VariableFormula.cs" />
@@ -165,7 +185,7 @@
     </None>
     <None Include="Formulas.CodeGeneration\FormulaGenerator.tt">
     </None>
-    <None Include="Formulas.CodeGeneration\FormulaInactionVisitorTemplate.tt">
+    <None Include="Formulas.CodeGeneration\FormulaNoActionVisitorTemplate.tt">
     </None>
     <None Include="Formulas.CodeGeneration\Formulas.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

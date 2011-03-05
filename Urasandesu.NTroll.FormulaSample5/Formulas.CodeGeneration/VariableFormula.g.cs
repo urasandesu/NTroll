@@ -9,12 +9,12 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class VariableFormula : Formula
     {
-        public VariableFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.Variable;
             VariableName = default(string);
-            Initialize();
         }
 
         public const string NameOfVariableName = "VariableName";
@@ -35,22 +35,20 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            return base.PinCore();
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
             sb.Append(NameOfVariableName);
             sb.Append("\": ");
             AppendValueTo(VariableName, sb);
-            sb.Append("}");
         }
     }
 }

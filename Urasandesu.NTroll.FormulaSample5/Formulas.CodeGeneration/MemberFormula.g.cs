@@ -9,13 +9,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public abstract partial class MemberFormula : Formula
     {
-        public MemberFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.None;
             Instance = default(Formula);
             Member = default(IMemberDeclaration);
-            Initialize();
         }
 
         public const string NameOfInstance = "Instance";
@@ -40,10 +40,10 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Instance = Formula.Pin(Instance);
-            return base.PinCore();
+            Formula.Pin(Instance);
+            base.PinCore();
         }
 
 
@@ -60,7 +60,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Instance.AppendTo(sb);
+                Instance.AppendWithBracketTo(sb);
             }
             sb.Append(", ");
             sb.Append("\"");

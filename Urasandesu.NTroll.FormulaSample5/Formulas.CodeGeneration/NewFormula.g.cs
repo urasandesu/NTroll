@@ -9,13 +9,13 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
     public partial class NewFormula : Formula
     {
-        public NewFormula()
-            : base()
+
+        protected override void InitializeForCodeGeneration()
         {
+            base.InitializeForCodeGeneration();
             NodeType = NodeType.New;
             Constructor = default(IConstructorDeclaration);
             Arguments = new FormulaCollection<Formula>();
-            Initialize();
         }
 
         public const string NameOfConstructor = "Constructor";
@@ -46,16 +46,15 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         }
 
 
-        protected override Formula PinCore()
+        protected override void PinCore()
         {
-            Arguments = (FormulaCollection<Formula>)Formula.Pin(Arguments);
-            return base.PinCore();
+            Formula.Pin(Arguments);
+            base.PinCore();
         }
 
 
         public override void AppendTo(StringBuilder sb)
         {
-            sb.Append("{");
             base.AppendTo(sb);
             sb.Append(", ");
             sb.Append("\"");
@@ -72,9 +71,8 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             else
             {
-                Arguments.AppendTo(sb);
+                Arguments.AppendWithBracketTo(sb);
             }
-            sb.Append("}");
         }
     }
 }
