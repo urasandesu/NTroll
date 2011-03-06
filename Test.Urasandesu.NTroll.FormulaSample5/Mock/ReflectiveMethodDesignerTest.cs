@@ -78,7 +78,7 @@ namespace Test.Urasandesu.NTroll.FormulaSample5.Mock
             var f2ValueField = typeof(FieldTestClass2).GetField("ValueField");
             gen.Eval(() => f2ValueField.SetValue(f2, 30));
             gen.Eval(() => f2ValueField.SetValue(f2, f2ValueField.GetValue(f2)));
-            gen.Eval(() => TestHelper.WriteLog("ValueField: {0}", (int)f2ValueField.GetValue(f2)));
+            gen.Eval(() => TestHelper.WriteLog("ValueField: {0}", f2ValueField.GetValue(f2)));
             gen.Eval(() => writeLog.Invoke(null, new object[] { "ValueField: {0}", new object[] { f2ValueField.GetValue(f2) } }));
             var p2 = default(PropertyTestClass2);
             var p2Ci = typeof(PropertyTestClass2).GetConstructor(new Type[] { typeof(int), typeof(string) });

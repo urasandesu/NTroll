@@ -154,7 +154,8 @@
     <Compile Include="Formulas\ConditionalFormula.cs" />
     <Compile Include="Formulas\ConstantFormula.cs" />
     <Compile Include="Formulas\ConvertFormula.cs" />
-    <Compile Include="Formulas\ConvertReducer.cs" />
+    <Compile Include="Formulas\ConvertDecreaser.cs" />
+    <Compile Include="Formulas\ConvertIncreaser.cs" />
     <Compile Include="Formulas\EqualFormula.cs" />
     <Compile Include="Formulas\ExclusiveOrFormula.cs" />
     <Compile Include="Formulas\ExpressionToFormula.cs" />

@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Urasandesu.NAnonym;
 
 namespace Urasandesu.NTroll.FormulaSample5.Formulas
 {
@@ -26,6 +27,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
         IFormulaVisitor visitor;
         public FormulaAdapter(IFormulaVisitor visitor)
         {
+            Required.NotDefault(visitor, () => visitor);
             this.visitor = visitor;
         }
 <#+ 
@@ -60,15 +62,5 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
 <#+
         return this.GenerationEnvironment.ToString();
     }
-	
-	IEnumerable<FormulaTemplateProperty> GetDefaultAcceptingProperties(FormulaTemplate template)
-	{
-		var properties = Enumerable.Empty<FormulaTemplateProperty>();
-		if (Templates.ContainsKey(template.BaseTypeName))
-		{
-			properties = properties.Concat(GetDefaultAcceptingProperties(Templates[template.BaseTypeName]));
-		}
-		return properties.Concat(template.TemplateProperties.Where(_ => !_.ProhibitsDefaultAccepting && -1 < _.TypeName.IndexOf("Formula")));
-	}
 }
 #>

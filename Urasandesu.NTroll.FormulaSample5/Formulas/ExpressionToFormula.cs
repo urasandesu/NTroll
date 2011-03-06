@@ -382,7 +382,7 @@ namespace Urasandesu.NTroll.FormulaSample5.Formulas
             }
             if (!state.ConstMembersCache[type].ContainsKey(constMember))
             {
-                throw new NotSupportedException("Dsl.ConstMember can only use to a field which is static and init only.");
+                throw new NotSupportedException("Dsl.ConstMember can only use to a field that is static and init only.");
             }
             else
             {
