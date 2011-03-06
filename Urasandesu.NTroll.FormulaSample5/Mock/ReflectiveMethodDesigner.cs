@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using Urasandesu.NAnonym.ILTools;
-using Urasandesu.NTroll.FormulaSample5.Formulas;
+using Urasandesu.NAnonym.Formulas;
 using Urasandesu.NAnonym.Mixins.Urasandesu.NAnonym.ILTools;
 using Urasandesu.NAnonym;
 
