@@ -1,0 +1,7 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" appbase="Test.Urasandesu.NTroll.DomainFree\bin\Debug" configfile="Test.Urasandesu.NTroll.DomainFree.dll.config" binpathtype="Auto">
+    <assembly path="Test.Urasandesu.NTroll.DomainFree.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto" />
+</NUnitProject>

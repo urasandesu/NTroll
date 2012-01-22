@@ -28,18 +28,6 @@ namespace Urasandesu.NTroll.DomainFree
         public MyCounter Counter { get; private set; }
     }
 
-    public class MarshalByRefRunner : MarshalByRefObject
-    {
-        public Action Action { get; set; }
-        public void Run()
-        {
-            if (Action != null)
-            {
-                Action();
-            }
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
@@ -49,17 +37,17 @@ namespace Urasandesu.NTroll.DomainFree
             MySingleton.Instance.Counter.Increment();
             Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", MySingleton.Instance.Counter.Value);
 
-            DomainLooser<MySingleton>.RegisterInstantiator(() => MySingleton.Instance);
-            Console.WriteLine("MySingleton.Instance: {0}", DomainLooser<MySingleton>.Instance.GetHashCode());
-            DomainLooser<MySingleton>.Instance.Counter.Increment();
-            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", DomainLooser<MySingleton>.Instance.Counter.Value);
+            LooseDomain<MySingleton>.Register(() => MySingleton.Instance);
+            Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
+            LooseDomain<MySingleton>.Instance.Counter.Increment();
+            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
 
-            DomainLooser<MyFunc<MyCounter>>.RegisterInstantiator(() => MyFunc<MyCounter>.Instance);
+            LooseDomain<MyFunc<MyCounter>>.Register(() => MyFunc<MyCounter>.Instance);
             {
                 var counter = new MyCounter();
                 counter.Increment();
-                DomainLooser<MyFunc<MyCounter>>.Instance.Func = () => counter;
-                Console.WriteLine("************** Counter: {0}", DomainLooser<MyFunc<MyCounter>>.Instance.Func().Value);
+                LooseDomain<MyFunc<MyCounter>>.Instance.Func = () => counter;
+                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
             }
 
             var newDomain = AppDomain.CreateDomain("New Domain");
@@ -67,26 +55,26 @@ namespace Urasandesu.NTroll.DomainFree
             runner.Action = () =>
             {
                 Console.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
-                Console.WriteLine("MySingleton.Instance: {0}", DomainLooser<MySingleton>.Instance.GetHashCode());
-                DomainLooser<MySingleton>.Instance.Counter.Increment();
-                Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", DomainLooser<MySingleton>.Instance.Counter.Value);
+                Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
+                LooseDomain<MySingleton>.Instance.Counter.Increment();
+                Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
 
-                DomainLooser<MyFunc<MyCounter>>.Instance.Func().Increment();
-                Console.WriteLine("************** Counter: {0}", DomainLooser<MyFunc<MyCounter>>.Instance.Func().Value);
+                LooseDomain<MyFunc<MyCounter>>.Instance.Func().Increment();
+                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
 
                 var counter = new MyCounter();
                 counter.Increment();
-                DomainLooser<MyFunc<MyCounter>>.Instance.Func = () => counter;
-                Console.WriteLine("************** Counter: {0}", DomainLooser<MyFunc<MyCounter>>.Instance.Func().Value);
+                LooseDomain<MyFunc<MyCounter>>.Instance.Func = () => counter;
+                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
             };
             runner.Run();
 
             Console.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
-            Console.WriteLine("MySingleton.Instance: {0}", DomainLooser<MySingleton>.Instance.GetHashCode());
-            DomainLooser<MySingleton>.Instance.Counter.Increment();
-            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", DomainLooser<MySingleton>.Instance.Counter.Value);
-            DomainLooser<MyFunc<MyCounter>>.Instance.Func().Increment();
-            Console.WriteLine("************** Counter: {0}", DomainLooser<MyFunc<MyCounter>>.Instance.Func().Value);
+            Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
+            LooseDomain<MySingleton>.Instance.Counter.Increment();
+            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
+            LooseDomain<MyFunc<MyCounter>>.Instance.Func().Increment();
+            Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
         }
     }
 }
