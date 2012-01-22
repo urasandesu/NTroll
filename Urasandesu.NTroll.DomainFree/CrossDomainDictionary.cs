@@ -5,16 +5,16 @@ using mscoree;
 
 namespace Urasandesu.NTroll.DomainFree
 {
-    public class DomainFreeDictionary<TKey, TValue> : MarshalByRefObject
+    public class CrossDomainDictionary<TKey, TValue> : MarshalByRefObject
     {
-        static readonly string DictionaryName = "Domain Free Dictionary";
-        static DomainFreeDictionary<TKey, TValue> m_instance;
+        static readonly string DictionaryName = "Cross Domain Dictionary";
+        static CrossDomainDictionary<TKey, TValue> m_instance;
         Dictionary<TKey, TValue> m_contents = new Dictionary<TKey, TValue>();
 
         static AppDomain GetAppDomain(string friendlyName)
         {
             var hEnum = IntPtr.Zero;
-            var host = new CorRuntimeHostClass();
+            var host = new CorRuntimeHost();
             try
             {
                 host.EnumDomains(out hEnum);
@@ -44,7 +44,7 @@ namespace Urasandesu.NTroll.DomainFree
         }
 
 
-        public static DomainFreeDictionary<TKey, TValue> Instance
+        public static CrossDomainDictionary<TKey, TValue> Instance
         {
             get
             {
@@ -55,11 +55,11 @@ namespace Urasandesu.NTroll.DomainFree
                     {
                         domain = AppDomain.CreateDomain(DictionaryName);
                     }
-                    var type = typeof(DomainFreeDictionary<TKey, TValue>);
-                    var instance = (DomainFreeDictionary<TKey, TValue>)domain.GetData(type.FullName);
+                    var type = typeof(CrossDomainDictionary<TKey, TValue>);
+                    var instance = (CrossDomainDictionary<TKey, TValue>)domain.GetData(type.FullName);
                     if (instance == null)
                     {
-                        instance = (DomainFreeDictionary<TKey, TValue>)domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
+                        instance = (CrossDomainDictionary<TKey, TValue>)domain.CreateInstanceAndUnwrap(type.Assembly.FullName, type.FullName);
                         domain.SetData(type.FullName, instance);
                     }
                     m_instance = instance;

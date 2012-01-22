@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DomainFreeDictionary.cs" />
-    <Compile Include="DomainFreeInstantiator.cs" />
+    <Compile Include="CrossDomainDictionary.cs" />
+    <Compile Include="DomainLooser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
