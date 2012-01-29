@@ -13,26 +13,26 @@ namespace Urasandesu.NTroll.DomainFree
 
         LooseDomain() { }
 
-        public static void Register(Func<T> instantiator)
+        public static void Register(Func<T> instanceGetter)
         {
-            if (!instantiator.Method.IsStatic)
+            if (!instanceGetter.Method.IsStatic)
                 throw new ArgumentException("The parameter must be the reference of a " + 
-                                            "static method.", "instantiator");
+                                            "static method.", "instanceGetter");
 
-            var funcPtr = instantiator.Method.MethodHandle.GetFunctionPointer();
+            var funcPtr = instanceGetter.Method.MethodHandle.GetFunctionPointer();
             CrossDomainDictionary<Type, IntPtr>.Instance.AddIfNotExist(typeof(T), funcPtr);
         }
 
-        static T CreateInstance()
+        static T GetInstance()
         {
             var funcPtr = CrossDomainDictionary<Type, IntPtr>.Instance.GetIfExist(typeof(T));
             if (funcPtr == default(IntPtr))
-                throw new InvalidOperationException("The instantiator of T has not been " + 
+                throw new InvalidOperationException("The instance getter of T has not been " + 
                             "registered yet. Please call the method Register and give a " + 
-                            "instantiator to it.");
+                            "instance getter to it.");
 
-            var instantiator = new DynamicMethod("Instantiator", typeof(T), null, typeof(T).Module);
-            var gen = instantiator.GetILGenerator();
+            var instanceGetter = new DynamicMethod("Instantiator", typeof(T), null, typeof(T).Module);
+            var gen = instanceGetter.GetILGenerator();
             if (IntPtr.Size == 4)
             {
                 gen.Emit(OpCodes.Ldc_I4, funcPtr.ToInt32());
@@ -47,7 +47,7 @@ namespace Urasandesu.NTroll.DomainFree
             }
             gen.EmitCalli(OpCodes.Calli, CallingConventions.Standard, typeof(T), null, null);
             gen.Emit(OpCodes.Ret);
-            return ((Func<T>)instantiator.CreateDelegate(typeof(Func<T>)))();
+            return ((Func<T>)instanceGetter.CreateDelegate(typeof(Func<T>)))();
         }
 
         public static T Instance
@@ -60,7 +60,7 @@ namespace Urasandesu.NTroll.DomainFree
                     {
                         if (!ms_ready)
                         {
-                            ms_instance = CreateInstance();
+                            ms_instance = GetInstance();
                             Thread.MemoryBarrier();
                             ms_ready = true;
                         }

@@ -1,80 +1,143 @@
-﻿using System;
+﻿//#define MCLASS_SAMPLE
+#define SCLASS_SAMPLE
+
+#if _
+#elif MCLASS_SAMPLE
+using System;
+using System.Runtime.Remoting;
 
 namespace Urasandesu.NTroll.DomainFree
 {
-    public class MyFunc<TResult>
-    {
-        MyFunc() { }
-        static MyFunc<TResult> m_instance = new MyFunc<TResult>();
-        public static MyFunc<TResult> Instance { get { return m_instance; } }
-        public Func<TResult> Func { get; set; }
-    }
-
-    public class MyCounter
-    {
-        int m_value;
-        public void Increment() { ++m_value; }
-        public int Value { get { return m_value; } }
-    }
-
-    public class MySingleton
-    {
-        MySingleton()
-        {
-            Counter = new MyCounter();
-        }
-        static MySingleton m_instance = new MySingleton();
-        public static MySingleton Instance { get { return m_instance; } }
-        public MyCounter Counter { get; private set; }
-    }
-
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
-            Console.WriteLine("MySingleton.Instance: {0}", MySingleton.Instance.GetHashCode());
-            MySingleton.Instance.Counter.Increment();
-            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", MySingleton.Instance.Counter.Value);
-
-            LooseDomain<MySingleton>.Register(() => MySingleton.Instance);
-            Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
-            LooseDomain<MySingleton>.Instance.Counter.Increment();
-            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
-
-            LooseDomain<MyFunc<MyCounter>>.Register(() => MyFunc<MyCounter>.Instance);
+            Console.WriteLine("MarshalByRefObject Class Test: " +
+                              "Default AppDomain -> Test Domain");
             {
-                var counter = new MyCounter();
-                counter.Increment();
-                LooseDomain<MyFunc<MyCounter>>.Instance.Func = () => counter;
-                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
+                MClass.StaticMember = new object();
+                var o = new MClass();
+                Console.WriteLine("o is Transparent Proxy?: {0}",
+                                  RemotingServices.IsTransparentProxy(o));
+                o.InstanceMember = new object();
+                o.Run();
+
+                var info = AppDomain.CurrentDomain.SetupInformation;
+                var testDomain = AppDomain.CreateDomain("Test Domain", null, info);
+                testDomain.DoCallBack(new CrossAppDomainDelegate(o.Run));
+                AppDomain.Unload(testDomain);
             }
+            Console.WriteLine();
 
-            var newDomain = AppDomain.CreateDomain("New Domain");
-            var runner = (MarshalByRefRunner)newDomain.CreateInstanceAndUnwrap(typeof(MarshalByRefRunner).Assembly.FullName, typeof(MarshalByRefRunner).FullName);
-            runner.Action = () =>
+
+            Console.WriteLine("MarshalByRefObject Class Test: " +
+                              "Default AppDomain <- Test Domain");
             {
-                Console.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
-                Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
-                LooseDomain<MySingleton>.Instance.Counter.Increment();
-                Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
+                var info = AppDomain.CurrentDomain.SetupInformation;
+                var testDomain = AppDomain.CreateDomain("Test Domain", null, info);
+                var t = typeof(MClass);
+                var o = (MClass)testDomain.CreateInstanceAndUnwrap(t.Assembly.FullName, t.FullName);
+                Console.WriteLine("o is Transparent Proxy?: {0}",
+                                  RemotingServices.IsTransparentProxy(o));
 
-                LooseDomain<MyFunc<MyCounter>>.Instance.Func().Increment();
-                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
+                MClass.StaticMember = new object();
+                o.InstanceMember = new object();
+                o.Run();
 
-                var counter = new MyCounter();
-                counter.Increment();
-                LooseDomain<MyFunc<MyCounter>>.Instance.Func = () => counter;
-                Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
-            };
-            runner.Run();
+                testDomain.DoCallBack(new CrossAppDomainDelegate(o.Run));
+                AppDomain.Unload(testDomain);
+            }
+            Console.WriteLine();
 
-            Console.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
-            Console.WriteLine("MySingleton.Instance: {0}", LooseDomain<MySingleton>.Instance.GetHashCode());
-            LooseDomain<MySingleton>.Instance.Counter.Increment();
-            Console.WriteLine("MySingleton.Instance.Counter.Value: {0}", LooseDomain<MySingleton>.Instance.Counter.Value);
-            LooseDomain<MyFunc<MyCounter>>.Instance.Func().Increment();
-            Console.WriteLine("************** Counter: {0}", LooseDomain<MyFunc<MyCounter>>.Instance.Func().Value);
+            // The example displays the following output:
+            // 
+            //    MarshalByRefObject Class Test: Default AppDomain -> Test Domain
+            //    o is Transparent Proxy?: False
+            //    AppDomain: Urasandesu.NTroll.DomainFree.exe
+            //    MarshalByRefObject Class Static Member: 54267293
+            //    MarshalByRefObject Class Instance Member: 18643596
+            //    AppDomain: Urasandesu.NTroll.DomainFree.exe
+            //    MarshalByRefObject Class Static Member: 54267293
+            //    MarshalByRefObject Class Instance Member: 18643596
+            //    
+            //    MarshalByRefObject Class Test: Default AppDomain <- Test Domain
+            //    o is Transparent Proxy?: True
+            //    AppDomain: Test Domain
+            //    MarshalByRefObject Class Static Member: 0
+            //    MarshalByRefObject Class Instance Member: 55915408
+            //    AppDomain: Test Domain
+            //    MarshalByRefObject Class Static Member: 0
+            //    MarshalByRefObject Class Instance Member: 55915408
         }
     }
 }
+#elif SCLASS_SAMPLE
+using System;
+using System.Runtime.Remoting;
+
+namespace Urasandesu.NTroll.DomainFree
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Serializable Class Test: " + 
+                              "Default AppDomain -> Test Domain"); 
+            {
+                SClass.StaticMember = new object();
+                var o = new SClass();
+                Console.WriteLine("o is Transparent Proxy?: {0}", 
+                                  RemotingServices.IsTransparentProxy(o));
+                o.InstanceMember = new object();
+                o.Run();
+
+                var info = AppDomain.CurrentDomain.SetupInformation;
+                var testDomain = AppDomain.CreateDomain("Test Domain", null, info);
+                testDomain.DoCallBack(new CrossAppDomainDelegate(o.Run));
+                AppDomain.Unload(testDomain);
+            }
+            Console.WriteLine();
+
+
+            Console.WriteLine("Serializable Class Test: " + 
+                              "Default AppDomain <- Test Domain");
+            {
+                var info = AppDomain.CurrentDomain.SetupInformation;
+                var testDomain = AppDomain.CreateDomain("Test Domain", null, info);
+                var t = typeof(SClass);
+                var o = (SClass)testDomain.CreateInstanceAndUnwrap(t.Assembly.FullName, t.FullName);
+                Console.WriteLine("o is Transparent Proxy?: {0}",
+                                  RemotingServices.IsTransparentProxy(o));
+
+                SClass.StaticMember = new object();
+                o.InstanceMember = new object();
+                o.Run();
+
+                testDomain.DoCallBack(new CrossAppDomainDelegate(o.Run));
+                AppDomain.Unload(testDomain);
+            }
+            Console.WriteLine();
+
+            // The example displays the following output:
+            // 
+            //    Serializable Class Test: Default AppDomain -> Test Domain
+            //    o is Transparent Proxy?: False
+            //    AppDomain: Urasandesu.NTroll.DomainFree.exe
+            //    Serializable Class Static Member: 54267293
+            //    Serializable Class Instance Member: 18643596
+            //    AppDomain: Test Domain
+            //    Serializable Class Static Member: 0
+            //    Serializable Class Instance Member: 18796293
+            //    
+            //    Serializable Class Test: Default AppDomain <- Test Domain
+            //    o is Transparent Proxy?: False
+            //    AppDomain: Urasandesu.NTroll.DomainFree.exe
+            //    Serializable Class Static Member: 12289376
+            //    Serializable Class Instance Member: 43495525
+            //    AppDomain: Test Domain
+            //    Serializable Class Static Member: 0
+            //    Serializable Class Instance Member: 43942917
+        }
+    }
+}
+#endif

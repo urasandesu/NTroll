@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using mscoree;
-using System.Reflection;
 
 namespace Urasandesu.NTroll.DomainFree
 {
     public class CrossDomainDictionary<TKey, TValue> : MarshalByRefObject
     {
-        public static readonly string DictionaryName = "Cross Domain Dictionary";
+        const string DictionaryName = "Cross Domain Dictionary";
         static readonly object ms_lockObj = new object();
         static CrossDomainDictionary<TKey, TValue> ms_instance;
         static bool ms_ready = false;
@@ -67,7 +67,7 @@ namespace Urasandesu.NTroll.DomainFree
             {
                 instance = (CrossDomainDictionary<TKey, TValue>)domain.CreateInstanceAndUnwrap(
                                                      type.Assembly.FullName, type.FullName, false,
-                                                     BindingFlags.NonPublic | BindingFlags.Instance, 
+                                                     BindingFlags.NonPublic | BindingFlags.Instance,
                                                      null, null, null, null, null);
                 domain.SetData(type.AssemblyQualifiedName, instance);
             }

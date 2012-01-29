@@ -41,6 +41,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,12 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationManager.cs" />
     <Compile Include="CrossDomainDictionary.cs" />
     <Compile Include="LooseDomain.cs" />
-    <Compile Include="DomainUtil.cs" />
-    <Compile Include="MarshalByRefRunner.cs" />
+    <Compile Include="AppDomainMixin.cs" />
+    <Compile Include="MarshalByRefRunners.cs" />
+    <Compile Include="MClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

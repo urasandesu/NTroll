@@ -29,7 +29,7 @@ namespace Test.Urasandesu.NTroll.DomainFree
 
             LooseDomain<MyStopwatch>.Instance.Restart();
             MyConsole.Out.WriteLine("Elapsed: {0} ms", LooseDomain<MyStopwatch>.Instance.ElapsedMilliseconds);
-            AppDomain.CurrentDomain.UsingNewAppDomain(() =>
+            AppDomain.CurrentDomain.RunAtIsolatedDomain(() =>
             {
                 MyConsole.Out.WriteLine("AppDomain: {0}", AppDomain.CurrentDomain.FriendlyName);
                 MyConsole.Out.WriteLine("Elapsed: {0} ms", LooseDomain<MyStopwatch>.Instance.ElapsedMilliseconds);
